@@ -50,7 +50,6 @@ class TodoController extends GetxController {
     isChecked.value = true;
     AppData.list[index]['selesai'] = !AppData.list[index]['selesai'];
     db.updateData();
-    print(AppData.list);
     hasilList();
     isChecked.value = false;
   }

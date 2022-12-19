@@ -34,7 +34,10 @@ class AddTodoController extends GetxController {
       AppData.list.add({
         "nama": titleCon.text,
         "selesai": false,
-        "tanggal": AppFormat.dateToString(DateTime.parse(dateCon.text)),
+        "tanggal": dateCon.text != ''
+            ? AppFormat.dateToString(DateTime.parse(dateCon.text))
+            : null,
+        "deskripsi": dateCon.text != '' ? subtitleCon.text : null,
       });
 
       Get.offAllNamed(Routes.HOME);
