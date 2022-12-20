@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:todo_hive/app/data/app_data.dart';
 import 'package:todo_hive/app/utils/helpers/app_format.dart';
 import 'package:todo_hive/app/utils/helpers/helpers.dart';
@@ -12,7 +11,7 @@ class AddTodoController extends GetxController {
   TextEditingController subtitleCon = TextEditingController();
   TextEditingController dateCon = TextEditingController();
 
-  DateFormat format = DateFormat("yyyy-MM-dd");
+  AppData db = AppData();
 
   @override
   void onInit() {
@@ -31,16 +30,20 @@ class AddTodoController extends GetxController {
     if (titleCon.text.isEmpty) {
       AppHelper.dialogWarning("Title must be filled!");
     } else {
-      AppData.list.add({
-        "nama": titleCon.text,
-        "selesai": false,
-        "tanggal": dateCon.text != ''
-            ? AppFormat.dateToString(DateTime.parse(dateCon.text))
-            : null,
-        "deskripsi": dateCon.text != '' ? subtitleCon.text : null,
-      });
-
+      tambahData();
+      db.updateData();
       Get.offAllNamed(Routes.HOME);
     }
+  }
+
+  void tambahData() {
+    AppData.list.add({
+      "nama": titleCon.text,
+      "selesai": false,
+      "tanggal": dateCon.text != ''
+          ? AppFormat.dateToString(DateTime.parse(dateCon.text))
+          : null,
+      "deskripsi": dateCon.text != '' ? subtitleCon.text : null,
+    });
   }
 }

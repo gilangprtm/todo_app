@@ -8,6 +8,7 @@ abstract class Routes {
   static const TODO = _Paths.TODO;
   static const CALENDAR = _Paths.CALENDAR;
   static const ADD_TODO = _Paths.ADD_TODO;
+  static const SETTING = _Paths.SETTING;
 }
 
 abstract class _Paths {
@@ -15,4 +16,5 @@ abstract class _Paths {
   static const TODO = '/todo';
   static const CALENDAR = '/calendar';
   static const ADD_TODO = '/add-todo';
+  static const SETTING = '/setting';
 }

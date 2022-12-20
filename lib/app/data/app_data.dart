@@ -5,6 +5,7 @@ class AppData {
   var now = AppFormat.dateToString(DateTime.now());
   static List list = [];
   List todoList = [];
+  static bool onChange = false;
 
   // reference to init box
   final myBox = Hive.box("mybox");

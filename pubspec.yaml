@@ -3,7 +3,7 @@ version: 1.0.0+1
 publish_to: none
 description: A new Flutter project.
 environment: 
-  sdk: '>=2.18.4 <3.0.0'
+  sdk: '>=2.18.4 <3.0.5'
 
 dependencies: 
   cupertino_icons: ^1.0.2
@@ -12,7 +12,8 @@ dependencies:
     sdk: flutter
   flutter_native_splash: ^2.2.16
   uuid: ^3.0.7
-  intl: ^0.18.0
+  intl: ^0.17.0
+  table_calendar: ^3.0.8
   flutter_slidable: ^2.0.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0

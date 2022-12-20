@@ -19,9 +19,20 @@ class HomeView extends GetView<HomeController> {
               Tab(icon: Icon(Icons.calendar_month_outlined)),
             ],
           ),
-          title: const Text('Todo App'),
+          title: const Text('ToDo'),
           centerTitle: true,
           elevation: 0,
+          actions: [
+            IconButton(
+              onPressed: () {
+                print("object");
+              },
+              icon: const Icon(
+                Icons.settings,
+                size: 24.0,
+              ),
+            ),
+          ],
         ),
         body: TabBarView(
           children: [

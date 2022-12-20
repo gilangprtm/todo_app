@@ -10,7 +10,7 @@ class AddTodoView extends GetView<AddTodoController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('AddTodoView'),
+        title: Text('Add Your ToDo'),
         centerTitle: true,
       ),
       body: Stack(

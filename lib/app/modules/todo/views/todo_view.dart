@@ -72,6 +72,7 @@ class TodoView extends GetView<TodoController> {
         );
       }),
       floatingActionButton: FloatingActionButton(
+        elevation: 0,
         child: const Icon(Icons.add),
         onPressed: () {
           c.addButton();

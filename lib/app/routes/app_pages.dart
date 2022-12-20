@@ -6,6 +6,8 @@ import 'package:todo_hive/app/modules/calendar/bindings/calendar_binding.dart';
 import 'package:todo_hive/app/modules/calendar/views/calendar_view.dart';
 import 'package:todo_hive/app/modules/home/bindings/home_binding.dart';
 import 'package:todo_hive/app/modules/home/views/home_view.dart';
+import 'package:todo_hive/app/modules/setting/bindings/setting_binding.dart';
+import 'package:todo_hive/app/modules/setting/views/setting_view.dart';
 import 'package:todo_hive/app/modules/todo/bindings/todo_binding.dart';
 import 'package:todo_hive/app/modules/todo/views/todo_view.dart';
 
@@ -36,6 +38,11 @@ class AppPages {
       name: _Paths.ADD_TODO,
       page: () => AddTodoView(),
       binding: AddTodoBinding(),
+    ),
+    GetPage(
+      name: _Paths.SETTING,
+      page: () => SettingView(),
+      binding: SettingBinding(),
     ),
   ];
 }
