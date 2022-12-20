@@ -73,7 +73,7 @@ class AppHelper {
             const EdgeInsets.only(top: 0, bottom: 5, left: 20, right: 20),
         actions: [
           TextButton(
-            child: const Text("Close"),
+            child: Text('close'.tr),
             onPressed: () {
               Get.back(result: false);
             },

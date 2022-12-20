@@ -14,6 +14,7 @@ class AppTranslation extends Translations {
           'setting': 'Setting',
           'languange': 'Languange',
           'chose_languange': 'Chose Languange',
+          'close': 'Close',
         },
         'id': {
           'add_todo_title': 'Tambahkan ToDo',
@@ -26,6 +27,7 @@ class AppTranslation extends Translations {
           'setting': 'Pengaturan',
           'languange': 'Bahasa',
           'chose_languange': 'Pilih Bahasa',
+          'close': 'Tutup',
         },
       };
 }
