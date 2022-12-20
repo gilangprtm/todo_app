@@ -18,27 +18,34 @@ ThemeData darkTheme() {
         buttonColor: Colors.amber,
         disabledColor: Colors.grey,
       ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: AppColor.primary,
+        titleTextStyle: TextStyle(
+          color: AppColor.white,
+          fontSize: 18,
+        ),
+      ),
       colorScheme: ColorScheme.fromSwatch().copyWith(
+        primary: AppColor.primary,
         secondary: Colors.red,
       ));
 }
 
 ThemeData lightTheme() {
   return ThemeData.light().copyWith(
-      textTheme: ThemeData.light().textTheme.apply(
-            fontFamily: 'Poppins',
-          ),
-      primaryTextTheme: ThemeData.light().textTheme.apply(
-            fontFamily: 'Poppins',
-          ),
-      brightness: Brightness.light,
-      primaryColor: Colors.blue,
-      buttonTheme: ButtonThemeData(
-        buttonColor: Colors.blue,
-        disabledColor: Colors.grey,
-      ),
-      colorScheme: ColorScheme.fromSwatch().copyWith(
-        secondary: AppColor.blue,
-        primaryContainer: AppColor.blue,
-      ));
+    textTheme: ThemeData.light().textTheme.apply(
+          fontFamily: 'Poppins',
+        ),
+    primaryTextTheme: ThemeData.light().textTheme.apply(
+          fontFamily: 'Poppins',
+        ),
+    primaryColor: Colors.blue,
+    buttonTheme: ButtonThemeData(
+      buttonColor: Colors.blue,
+      disabledColor: Colors.grey,
+    ),
+    colorScheme: ColorScheme.fromSwatch().copyWith(
+      primary: AppColor.primary,
+    ),
+  );
 }

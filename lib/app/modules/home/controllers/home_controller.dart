@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:todo_hive/app/utils/helpers/helpers.dart';
 
 import '../../../data/app_data.dart';
@@ -19,7 +18,6 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
-    FlutterNativeSplash.remove();
     checkLanguange();
     super.onInit();
   }

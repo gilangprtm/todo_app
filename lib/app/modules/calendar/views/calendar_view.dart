@@ -19,9 +19,13 @@ class CalendarView extends GetView<CalendarController> {
               firstDay: DateTime(c.focusDate.value.year - 10, 1, 1),
               lastDay: DateTime(c.focusDate.value.year + 10, 1, 1),
               focusedDay: c.focusDate.value,
+              calendarStyle: const CalendarStyle(
+                selectedDecoration: const BoxDecoration(
+                    color: AppColor.primary, shape: BoxShape.circle),
+              ),
               headerStyle: const HeaderStyle(
                 titleTextStyle: TextStyle(
-                  color: AppColor.blue,
+                  color: AppColor.primary,
                   fontWeight: FontWeight.bold,
                   fontSize: 18.0,
                 ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:todo_hive/app/utils/theme/app_color.dart';
 
 import '../../calendar/views/calendar_view.dart';
 import '../../todo/views/todo_view.dart';
@@ -15,8 +16,16 @@ class HomeView extends GetView<HomeController> {
         appBar: AppBar(
           bottom: const TabBar(
             tabs: [
-              Tab(icon: Icon(Icons.list_rounded)),
-              Tab(icon: Icon(Icons.calendar_month_outlined)),
+              Tab(
+                  icon: Icon(
+                Icons.list_rounded,
+                color: AppColor.white,
+              )),
+              Tab(
+                  icon: Icon(
+                Icons.calendar_month_outlined,
+                color: AppColor.white,
+              )),
             ],
           ),
           title: Text("ToDo"),
