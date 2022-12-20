@@ -19,13 +19,13 @@ class HomeView extends GetView<HomeController> {
               Tab(icon: Icon(Icons.calendar_month_outlined)),
             ],
           ),
-          title: const Text('ToDo'),
+          title: Text("ToDo"),
           centerTitle: true,
           elevation: 0,
           actions: [
             IconButton(
               onPressed: () {
-                print("object");
+                controller.onSetting();
               },
               icon: const Icon(
                 Icons.settings,

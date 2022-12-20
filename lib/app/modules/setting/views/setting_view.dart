@@ -14,7 +14,7 @@ class SettingView extends GetView<SettingController> {
       ),
       body: Center(
         child: Text(
-          'SettingView is working',
+          controller.count.toString(),
           style: TextStyle(fontSize: 20),
         ),
       ),

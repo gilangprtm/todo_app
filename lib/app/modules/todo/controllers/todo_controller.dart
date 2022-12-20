@@ -31,16 +31,23 @@ class TodoController extends GetxController {
       db.loadData();
       hasilList();
     }
+
     super.onInit();
   }
 
   @override
   void onReady() {
+    initLocale();
     super.onReady();
   }
 
   @override
   void onClose() {}
+
+  void initLocale() {
+    AppData().loadLocale();
+    Get.updateLocale(Locale(AppData.locale));
+  }
 
   void hasilList() {
     hasil.value = AppData.list.map((e) => TodoModel.fromDynamic(e)).toList();
@@ -94,19 +101,19 @@ class TodoController extends GetxController {
               child: Column(
                 children: [
                   AppInputText(
-                    label: "Title",
+                    label: "title".tr,
                     textCon: titleCon,
                     isReadOnly: true,
                   ),
                   AppInputText(
-                    label: "Description",
+                    label: "description".tr,
                     textCon: subtitleCon,
                     hintText: "description",
                     isDescription: true,
                     isReadOnly: true,
                   ),
                   AppDateInput(
-                    label: "Date",
+                    label: "date".tr,
                     textCon: dateCon,
                     isEdit: false,
                   ),

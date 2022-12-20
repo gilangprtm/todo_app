@@ -4,8 +4,7 @@ import 'package:todo_hive/app/utils/helpers/app_format.dart';
 class AppData {
   var now = AppFormat.dateToString(DateTime.now());
   static List list = [];
-  List todoList = [];
-  static bool onChange = false;
+  static String locale = "en";
 
   // reference to init box
   final myBox = Hive.box("mybox");
@@ -33,5 +32,13 @@ class AppData {
 
   void updateData() {
     myBox.put("TODOLIST", list);
+  }
+
+  void updateLocale() {
+    myBox.put("LOCALE", locale);
+  }
+
+  void loadLocale() {
+    locale = myBox.get("LOCALE");
   }
 }

@@ -15,7 +15,7 @@ class CalendarView extends GetView<CalendarController> {
       return ListView(
         children: [
           TableCalendar(
-              locale: 'id_ID',
+              locale: 'locale'.tr,
               firstDay: DateTime(c.focusDate.value.year - 10, 1, 1),
               lastDay: DateTime(c.focusDate.value.year + 10, 1, 1),
               focusedDay: c.focusDate.value,

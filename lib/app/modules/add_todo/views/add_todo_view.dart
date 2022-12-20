@@ -10,7 +10,7 @@ class AddTodoView extends GetView<AddTodoController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Your ToDo'),
+        title: Text('add_todo_title'.tr),
         centerTitle: true,
       ),
       body: Stack(
@@ -21,16 +21,16 @@ class AddTodoView extends GetView<AddTodoController> {
               child: Column(
                 children: [
                   AppInputText(
-                    label: "Title",
+                    label: "title".tr,
                     textCon: controller.titleCon,
                   ),
                   AppInputText(
-                    label: "Description",
+                    label: "description".tr,
                     textCon: controller.subtitleCon,
                     isDescription: true,
                   ),
                   AppDateInput(
-                    label: "Date",
+                    label: "date".tr,
                     textCon: controller.dateCon,
                   ),
                 ],
@@ -44,7 +44,7 @@ class AddTodoView extends GetView<AddTodoController> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 AppButton(
-                    text: "Save",
+                    text: "save".tr,
                     onTap: () {
                       controller.saveButton();
                     }),
