@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_hive/app/utils/theme/app_color.dart';
 
 export 'app_font.dart';
 export 'app_color.dart';
@@ -37,7 +38,7 @@ ThemeData lightTheme() {
         disabledColor: Colors.grey,
       ),
       colorScheme: ColorScheme.fromSwatch().copyWith(
-        secondary: Colors.pink,
-        primaryContainer: Colors.pink,
+        secondary: AppColor.blue,
+        primaryContainer: AppColor.blue,
       ));
 }
