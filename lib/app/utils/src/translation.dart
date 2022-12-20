@@ -11,6 +11,9 @@ class AppTranslation extends Translations {
           'save': 'Save',
           'locale': 'en_US',
           'warning_no_title': 'Title must be filled!',
+          'setting': 'Setting',
+          'languange': 'Languange',
+          'chose_languange': 'Chose Languange',
         },
         'id': {
           'add_todo_title': 'Tambahkan ToDo',
@@ -20,6 +23,9 @@ class AppTranslation extends Translations {
           'save': 'Simpan',
           'locale': 'id_ID',
           'warning_no_title': 'Judul harus diisi!',
+          'setting': 'Pengaturan',
+          'languange': 'Bahasa',
+          'chose_languange': 'Pilih Bahasa',
         },
       };
 }

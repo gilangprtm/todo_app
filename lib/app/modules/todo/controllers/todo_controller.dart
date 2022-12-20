@@ -108,7 +108,7 @@ class TodoController extends GetxController {
                   AppInputText(
                     label: "description".tr,
                     textCon: subtitleCon,
-                    hintText: "description",
+                    hintText: "description".tr,
                     isDescription: true,
                     isReadOnly: true,
                   ),

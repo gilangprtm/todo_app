@@ -78,19 +78,19 @@ class CalendarController extends GetxController {
               child: Column(
                 children: [
                   AppInputText(
-                    label: "Title",
+                    label: "title".tr,
                     textCon: titleCon,
                     isReadOnly: true,
                   ),
                   AppInputText(
-                    label: "Description",
+                    label: "description".tr,
                     textCon: subtitleCon,
-                    hintText: "description",
+                    hintText: "description".tr,
                     isDescription: true,
                     isReadOnly: true,
                   ),
                   AppDateInput(
-                    label: "Date",
+                    label: "date".tr,
                     textCon: dateCon,
                     isEdit: false,
                   ),
