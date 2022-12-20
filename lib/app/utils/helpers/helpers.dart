@@ -61,4 +61,25 @@ class AppHelper {
       ),
     );
   }
+
+  static Future dialogCustomWidget(List<Widget> children) async {
+    await Get.dialog(
+      AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: AppHelper.cicularRadius),
+        content: Column(mainAxisSize: MainAxisSize.min, children: children),
+        contentPadding:
+            const EdgeInsets.only(bottom: 0, top: 20, right: 10, left: 10),
+        actionsPadding:
+            const EdgeInsets.only(top: 0, bottom: 5, left: 20, right: 20),
+        actions: [
+          TextButton(
+            child: const Text("Close"),
+            onPressed: () {
+              Get.back(result: false);
+            },
+          ),
+        ],
+      ),
+    );
+  }
 }

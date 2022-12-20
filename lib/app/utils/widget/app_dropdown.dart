@@ -61,6 +61,8 @@ class _AppDropdownInputState<T> extends State<AppDropdownInput<T>> {
             borderRadius: AppHelper.cicularRadius,
           ),
           child: DropdownButton<T>(
+            borderRadius: AppHelper.cicularRadius,
+            elevation: 4,
             value: widget.value!.isEmpty ? null : widget.value as T,
             onChanged: widget.onChanged,
             hint: Column(
