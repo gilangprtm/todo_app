@@ -20,7 +20,7 @@ class AppHelper {
           children: [
             const Icon(
               Icons.warning_rounded,
-              color: AppColor.blue,
+              color: AppColor.yellow,
               size: 40,
             ),
             const Padding(padding: EdgeInsets.all(7)),
@@ -28,7 +28,7 @@ class AppHelper {
               textAlign: TextAlign.center,
               message ?? "-",
               style: const TextStyle(
-                color: AppColor.blue,
+                color: AppColor.yellow,
               ),
             ),
           ],
@@ -45,7 +45,7 @@ class AppHelper {
           children: [
             const Icon(
               Icons.check_circle,
-              color: AppColor.blue,
+              color: AppColor.blue2,
               size: 40,
             ),
             const Padding(padding: EdgeInsets.all(7)),
@@ -53,7 +53,7 @@ class AppHelper {
               textAlign: TextAlign.center,
               message ?? "-",
               style: const TextStyle(
-                color: AppColor.blue,
+                color: AppColor.blue2,
               ),
             ),
           ],

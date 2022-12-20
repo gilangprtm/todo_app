@@ -28,7 +28,7 @@ class AddTodoController extends GetxController {
 
   void saveButton() {
     if (titleCon.text.isEmpty) {
-      AppHelper.dialogWarning("Title must be filled!");
+      AppHelper.dialogWarning('warning_no_title'.tr);
     } else {
       tambahData();
       db.updateData();

@@ -9,7 +9,8 @@ class AppTranslation extends Translations {
           'description': 'Description',
           'date': 'Date',
           'save': 'Save',
-          'locale': 'en_US'
+          'locale': 'en_US',
+          'warning_no_title': 'Title must be filled!',
         },
         'id': {
           'add_todo_title': 'Tambahkan ToDo',
@@ -17,7 +18,8 @@ class AppTranslation extends Translations {
           'description': 'Deskripsi',
           'date': 'Tanggal',
           'save': 'Simpan',
-          'locale': 'id_ID'
+          'locale': 'id_ID',
+          'warning_no_title': 'Judul harus diisi!',
         },
       };
 }
