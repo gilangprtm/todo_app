@@ -46,6 +46,7 @@ ThemeData lightTheme() {
     ),
     colorScheme: ColorScheme.fromSwatch().copyWith(
       primary: AppColor.primary,
+      secondary: AppColor.primary,
     ),
   );
 }

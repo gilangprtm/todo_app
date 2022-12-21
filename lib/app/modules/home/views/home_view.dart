@@ -15,6 +15,7 @@ class HomeView extends GetView<HomeController> {
       child: Scaffold(
         appBar: AppBar(
           bottom: const TabBar(
+            indicatorColor: AppColor.white,
             tabs: [
               Tab(
                   icon: Icon(
