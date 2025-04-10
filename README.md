@@ -1,4 +1,4 @@
-# todo_hive
+# flutter_base
 
 A new Flutter project.
 

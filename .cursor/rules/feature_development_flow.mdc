@@ -1,0 +1,99 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# feature_development_flow.mdc
+
+## Feature Development Flow
+
+### 1. Data Layer Setup
+1. Create Models
+   - Create `*_model.dart` in `lib/data/models/`
+   - Define data structures
+   - Implement fromJson/toJson methods
+
+2. Create Repository
+   - Create `*_repository.dart` in `lib/data/datasource/network/repository/`
+   - Extend `BaseRepository`
+   - Implement data source operations
+   - Handle API responses
+
+3. Create Service
+   - Create `*_service.dart` in `lib/data/datasource/network/service/`
+   - Use repository for data operations
+   - Implement business logic
+   - Handle data transformations
+
+### 2. State Management Setup
+1. Create State
+   - Create `*_state.dart` in `lib/presentation/providers/*/`
+   - Extend `BaseState`
+   - Define immutable state properties
+   - Implement `copyWith` method
+
+2. Create Notifier
+   - Create `*_notifier.dart` in `lib/presentation/providers/*/`
+   - Extend `BaseStateNotifier<*_State>`
+   - Implement lifecycle methods (onInit, onClose)
+   - Implement business logic using service
+   - Use run/runAsync for state updates
+
+3. Create Provider
+   - Create `*_provider.dart` in `lib/presentation/providers/*/`
+   - Define provider using StateNotifierProvider
+   - Setup dependency injection
+
+### 3. Dependency Injection
+1. Update Providers
+   - Add repository provider in `lib/core/di/providers.dart`
+   - Add service provider
+   - Add feature provider
+
+### 4. Routing Setup
+1. Add Route Constants
+   - Add route constant in `lib/presentation/routes/app_routes.dart`
+   ```dart
+   class AppRoutes {
+     static const String exampleList = '/example';
+     static const String exampleDetail = '/example/detail';
+   }
+   ```
+
+2. Add Route Builder
+   - Add route builder in `lib/presentation/routes/app_routes_provider.dart`
+   ```dart
+   class AppRoutesProvider {
+     static Map<String, WidgetBuilder> getRoutes() {
+       return {
+         AppRoutes.exampleList: (context) => const ExampleListPage(),
+         AppRoutes.exampleDetail: (context) => const ExampleDetailPage(),
+       };
+     }
+   }
+   ```
+
+### 5. UI Implementation
+1. Create Page
+   - Create `*_page.dart` in `lib/presentation/pages/*/`
+   - Implement UI using Consumer
+   - Use select for performance optimization
+   - Handle loading, error, and empty states
+
+2. Create Feature-Specific Widgets
+   - Create `*_widget.dart` in `lib/presentation/pages/*/widgets/`
+   - Extract reusable UI components
+   - Keep widgets focused and single-responsibility
+
+## Best Practices
+1. Follow naming conventions strictly
+2. Keep files focused and single-responsibility
+3. Implement proper error handling
+4. Use proper state management patterns
+5. Optimize UI performance with select
+6. Test both online and offline scenarios
+7. Document complex logic
+8. Follow existing patterns in the codebase
+
+
+

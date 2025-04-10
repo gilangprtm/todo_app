@@ -1,45 +1,94 @@
-name: todo_hive
+name: flutter_base
+description: "A new Flutter project."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
 version: 1.0.0+1
-publish_to: none
-description: A new Flutter project.
-environment: 
-  sdk: '>=2.18.4 <3.0.5'
 
-dependencies: 
+environment:
+  sdk: ^3.7.2
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State management
+  flutter_riverpod: ^2.5.0
+  riverpod_annotation: ^2.5.0
+
+  # Networking & API
+  dio: ^5.3.2
+  http: ^1.1.0
+  pretty_dio_logger: ^1.4.0
+
+  # Caching & Storage
+  cached_network_image: ^3.3.0
+  flutter_cache_manager: ^3.3.1
+  shared_preferences: ^2.2.1
+  sqflite: ^2.3.0
+  path_provider: ^2.1.1
+  path: ^1.8.3
+
+  # UI Components & Styling
+  google_fonts: ^6.2.1
+  flutter_svg: ^2.0.16
+  shimmer: ^3.0.0
   cupertino_icons: ^1.0.2
-  get: 4.6.5
-  flutter: 
+  font_awesome_flutter: ^10.8.0
+  modal_bottom_sheet: ^3.0.0
+  flutter_easyloading: ^3.0.5
+
+  # Documents & Files
+  flutter_pdfview: ^1.4.0
+  syncfusion_flutter_pdfviewer: ^28.2.3
+  file_picker: ^9.0.2
+  image_picker: ^1.1.2
+
+  # Utilities
+  intl: ^0.20.2
+  package_info_plus: ^8.3.0
+  uuid: ^4.5.1
+
+dev_dependencies:
+  flutter_test:
     sdk: flutter
-  flutter_native_splash: ^2.2.16
-  uuid: ^3.0.7
-  intl: ^0.17.0
-  table_calendar: ^3.0.8
-  flutter_slidable: ^2.0.0
-  hive: ^2.2.3
-  hive_flutter: ^1.1.0
-
-dev_dependencies: 
-  flutter_lints: ^2.0.0
-  flutter_test: 
+  integration_test:
     sdk: flutter
-  hive_generator: ^2.0.0
-  build_runner: ^2.3.3
 
-flutter_native_splash:
-  color: "#008dc2"
-  image: assets/logo-white.png
+  # Testing
+  mockito: ^5.4.4
+  mocktail: ^1.0.3
+  network_image_mock: ^2.0.1
 
-flutter: 
+  # Code Generation
+  build_runner: ^2.4.8
+  riverpod_generator: ^2.5.0
+
+  # Code Quality
+  flutter_lints: ^3.0.0
+
+flutter:
   uses-material-design: true
 
+  # Assets for the app
   assets:
-    - assets/icons/
-
-  fonts:
-    - family: Poppins
-      fonts:
-        - asset: assets/fonts/Poppins-Regular.ttf
-        - asset: assets/fonts/Poppins-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/Poppins-Bold.ttf
-          weight: 700
+    - assets/images/

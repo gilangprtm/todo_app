@@ -1,0 +1,75 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# project_structure.mdc
+
+## Project Structure
+
+### Core Structure
+- Core Utilities: `lib/core/`
+  - Base Classes: `lib/core/base/*` (BaseRepository, BaseState, BaseStateNotifier)
+  - Theme: `lib/core/theme/*`
+  - Utilities: `lib/core/utils/*`
+  - Services: `lib/core/services/*`
+  - Dependency Injection: `lib/core/di/*`
+  - Environment Config: `lib/core/env/*`
+  - Helper Classes: `lib/core/helper/*`
+  - Mahas Components: `lib/core/mahas/*`
+
+### Data Layer
+- Data Sources: `lib/data/datasource/`
+  - Models: `lib/data/models/*_model.dart`
+  - Network:
+    - Repositories: `lib/data/datasource/network/repository/*_repository.dart` (extends BaseRepository)
+    - Services: `lib/data/datasource/network/service/*_service.dart`
+  - Local:
+    - Repositories: `lib/data/datasource/local/repository/*_repository.dart` (extends BaseRepository)
+    - Services: `lib/data/datasource/local/service/*_service.dart`
+
+### Presentation Layer
+- Providers: `lib/presentation/providers/*/`
+  - State: `*_state.dart`
+  - Notifier: `*_notifier.dart`
+  - Provider: `*_provider.dart`
+- Pages: `lib/presentation/pages/*/*_page.dart`
+  - Feature-Specific Widgets: `lib/presentation/pages/*/widgets/*_widget.dart`
+- Shared Widgets: `lib/presentation/widgets/*_widget.dart`
+- Routes: `lib/presentation/routes/*`
+
+## Naming Conventions
+
+### Files
+- Use snake_case for all file names
+- Add type suffix to files:
+  - Models: `*_model.dart`
+  - Pages: `*_page.dart`
+  - Providers: `*_provider.dart`
+  - Services: `*_service.dart`
+  - Repositories: `*_repository.dart`
+  - Widgets: `*_widget.dart` or `*_tab.dart` for tab components
+
+### Classes
+- Use PascalCase for class names
+- Add type suffix to class names:
+  - Models: `ExampleModel`, `LocationModel`
+  - Pages: `ExampleListPage`, `TypeChartPage`
+  - Providers: `ExampleDetailProvider`, `LocationListProvider`
+  - Services: `ExampleService`, `TypeService`
+  - Repositories: `ExampleRepository`, `AbilityRepository`
+
+### Variables and Properties
+- Use camelCase for variables and properties
+- Prefix private properties with underscore: `_exampleList`, `_isLoading`
+- Use explicit types for declarations
+- Use meaningful names that describe purpose, not type
+
+### Methods
+- Use camelCase for method names
+- Prefix private methods with underscore: `_loadExampleDetailsFromLocalStorage()`
+- Use action verbs to describe what the method does: `loadExampleList()`, `searchExample()`
+- Group methods by functionality with comments
+
+
+
