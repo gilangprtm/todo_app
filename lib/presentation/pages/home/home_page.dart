@@ -11,11 +11,7 @@ class HomePage extends ConsumerWidget {
 
     return const Scaffold(
       backgroundColor: Colors.white,
-      body: CustomScrollView(
-        slivers: [
-          // Search Header
-        ],
-      ),
+      body: const Center(child: Text('Home Page')),
     );
   }
 }

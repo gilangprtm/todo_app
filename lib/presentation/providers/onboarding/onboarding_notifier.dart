@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import '../../../core/base/base_state_notifier.dart';
 import '../../../core/utils/mahas.dart';
 import '../../../data/datasource/local/services/onboarding_service.dart';
@@ -10,13 +11,8 @@ class OnboardingNotifier extends BaseStateNotifier<OnboardingState> {
   OnboardingNotifier(super.initialState, super.ref, this._onboardingService);
 
   @override
-  Future<void> onInit() async {
-    // Initialize any required data here
-  }
-
-  @override
   Future<void> onClose() async {
-    // Clean up any resources here
+    state.pageController.dispose();
   }
 
   Future<void> nextPage() async {
@@ -26,6 +22,9 @@ class OnboardingNotifier extends BaseStateNotifier<OnboardingState> {
           currentPage: state.currentPage + 1,
           isLastPage: state.currentPage + 1 == 2,
         );
+
+        // Animate to the new page
+        await _animateToPage(state.currentPage);
       });
     }
   }
@@ -37,6 +36,9 @@ class OnboardingNotifier extends BaseStateNotifier<OnboardingState> {
           currentPage: state.currentPage - 1,
           isLastPage: false,
         );
+
+        // Animate to the new page
+        await _animateToPage(state.currentPage);
       });
     }
   }
@@ -44,7 +46,34 @@ class OnboardingNotifier extends BaseStateNotifier<OnboardingState> {
   Future<void> skipToLast() async {
     await runAsync('skipToLast', () async {
       state = state.copyWith(currentPage: 2, isLastPage: true);
+
+      // Animate to the last page
+      await _animateToPage(state.currentPage);
     });
+  }
+
+  Future<void> _animateToPage(int page) async {
+    if (state.pageController.hasClients) {
+      state = state.copyWith(ignorePageChange: true);
+
+      await state.pageController.animateToPage(
+        page,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+
+      state = state.copyWith(ignorePageChange: false);
+    }
+  }
+
+  void onPageChanged(int index) {
+    if (state.ignorePageChange) return;
+
+    if (index < state.currentPage) {
+      previousPage();
+    } else if (index > state.currentPage) {
+      nextPage();
+    }
   }
 
   Future<void> initializeDatabase() async {
@@ -67,7 +96,8 @@ class OnboardingNotifier extends BaseStateNotifier<OnboardingState> {
       );
       state = state.copyWith(
         isLoading: false,
-        error: 'Failed to initialize database',
+        error: e,
+        stackTrace: stackTrace,
       );
       Mahas.snackbar(
         'Error',
