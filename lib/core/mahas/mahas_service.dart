@@ -1,11 +1,12 @@
 import 'dart:async';
 
+import '../../presentation/routes/app_routes.dart';
 import '../services/logger_service.dart';
 import '../services/error_handler_service.dart';
-import '../services/initial_route_service.dart';
 import '../services/firebase_service.dart';
 import '../services/storage_service.dart';
 import '../services/cache_service.dart';
+import '../../data/datasource/local/db/db_local.dart';
 
 /// MahasService adalah kelas singleton yang mengelola inisialisasi aplikasi
 /// seperti firebase, local storage, dll.
@@ -26,7 +27,7 @@ class MahasService {
       await initErrorHandler();
 
       // Inisialisasi Cache Service
-      await initCache();
+      //await initCache();
 
       // Inisialisasi Firebase (jika diperlukan)
       //await initFirebase();
@@ -49,9 +50,19 @@ class MahasService {
   /// Determine the initial route based on application state
   static Future<String> determineInitialRoute() async {
     try {
-      // Use the InitialRouteService to determine the initial route
-      final initialRouteService = InitialRouteService();
-      return await initialRouteService.determineInitialRoute();
+      // Initialize database
+      final db = DBLocal();
+
+      // Check if we have any data in the todo table
+      final hasData = await db.hasData(DBLocal.tableTodo);
+
+      // If no data exists, user needs to go through onboarding
+      if (!hasData) {
+        return AppRoutes.onboarding;
+      }
+
+      // If data exists, user can go directly to home
+      return AppRoutes.home;
     } catch (e, stackTrace) {
       LoggerService.instance.e(
         '❌ Error determining initial route',
@@ -59,8 +70,8 @@ class MahasService {
         stackTrace: stackTrace,
         tag: 'MAHAS',
       );
-      // Return the welcome route as fallback
-      return '/welcome';
+      // Return onboarding as fallback to ensure proper initialization
+      return AppRoutes.onboarding;
     }
   }
 
@@ -90,7 +101,7 @@ class MahasService {
       await CacheService.instance.initialize();
 
       // Cache service sudah di-refactor sehingga preemptive cleaning
-      // berjalan otomatis sebagai bagian dari initialize()
+      // berjalan otomatis sebagian dari initialize()
       // Lihat implementasi di CacheService
 
       LoggerService.instance.i(

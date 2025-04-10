@@ -125,7 +125,7 @@ class AppTheme {
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white,
         backgroundColor: AppColors.ghibliSkyBlue,
-        textStyle: AppTypography.button,
+        textStyle: AppTypography.button.copyWith(color: Colors.white),
         shape: _buttonShape,
         minimumSize: const Size(88, 44),
         padding: const EdgeInsets.symmetric(
@@ -335,7 +335,7 @@ class AppTheme {
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         foregroundColor: AppColors.ghibliSkyBlue,
-        side: BorderSide(color: AppColors.ghibliSkyBlue),
+        side: const BorderSide(color: AppColors.ghibliSkyBlue),
         textStyle: AppTypography.button,
       ),
     ),
@@ -344,11 +344,14 @@ class AppTheme {
       fillColor: AppColors.darkSurfaceColor,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(_borderRadius),
-        borderSide: BorderSide(color: AppColors.darkBorderColor),
+        borderSide: const BorderSide(color: AppColors.darkBorderColor),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(_borderRadius),
-        borderSide: BorderSide(color: AppColors.ghibliSkyBlue, width: 1.5),
+        borderSide: const BorderSide(
+          color: AppColors.ghibliSkyBlue,
+          width: 1.5,
+        ),
       ),
     ),
     visualDensity: VisualDensity.adaptivePlatformDensity,

@@ -16,13 +16,14 @@ class DBLocal {
   DBLocal._internal();
 
   // Nama database dan versi
-  static const String _databaseName = "pokedex.db";
+  static const String _databaseName = "todo_app.db";
   static const int _databaseVersion = 1;
 
   // Nama tabel
-  static const String tablePokemon = 'pokemon';
-  static const String tablePokemonDetail = 'pokemon_detail';
-  static const String tablePokemonType = 'pokemon_type';
+  static const String tableTodo = 'todo';
+  static const String tableTodoTag = 'todo_tag';
+  static const String tableTag = 'tag';
+  static const String tableSubtask = 'subtask';
   static const String tableSettings = 'settings';
 
   // Logger
@@ -67,38 +68,56 @@ class DBLocal {
   Future _onCreate(Database db, int version) async {
     _logger.d('Creating database tables...');
 
-    // Tabel pokemon (daftar pokemon)
+    // Tabel todo (daftar todo)
     await db.execute('''
-      CREATE TABLE $tablePokemon (
-        id INTEGER PRIMARY KEY,
-        name TEXT NOT NULL,
-        url TEXT,
-        json_data TEXT
+      CREATE TABLE $tableTodo (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        description TEXT,
+        due_date TEXT,
+        priority INTEGER DEFAULT 0,
+        status INTEGER DEFAULT 0,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
       )
     ''');
 
-    // Tabel pokemon_detail (detail pokemon)
+    // Tabel tag (daftar tag)
     await db.execute('''
-      CREATE TABLE $tablePokemonDetail (
-        id INTEGER PRIMARY KEY,
-        name TEXT NOT NULL,
-        height INTEGER,
-        weight INTEGER,
-        json_data TEXT
+      CREATE TABLE $tableTag (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL UNIQUE,
+        color TEXT,
+        created_at TEXT NOT NULL
       )
     ''');
 
-    // Tabel pokemon_type (tipe pokemon)
+    // Tabel todo_tag (relasi many-to-many todo dan tag)
     await db.execute('''
-      CREATE TABLE $tablePokemonType (
-        id INTEGER PRIMARY KEY,
-        name TEXT NOT NULL,
-        url TEXT,
-        json_data TEXT
+      CREATE TABLE $tableTodoTag (
+        todo_id INTEGER,
+        tag_id INTEGER,
+        created_at TEXT NOT NULL,
+        PRIMARY KEY (todo_id, tag_id),
+        FOREIGN KEY (todo_id) REFERENCES $tableTodo (id) ON DELETE CASCADE,
+        FOREIGN KEY (tag_id) REFERENCES $tableTag (id) ON DELETE CASCADE
       )
     ''');
 
-    // Tabel settings (pengaturan)
+    // Tabel subtask (subtask dari todo)
+    await db.execute('''
+      CREATE TABLE $tableSubtask (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        todo_id INTEGER NOT NULL,
+        title TEXT NOT NULL,
+        is_completed INTEGER DEFAULT 0,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        FOREIGN KEY (todo_id) REFERENCES $tableTodo (id) ON DELETE CASCADE
+      )
+    ''');
+
+    // Tabel settings (pengaturan aplikasi)
     await db.execute('''
       CREATE TABLE $tableSettings (
         key TEXT PRIMARY KEY,

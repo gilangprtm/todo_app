@@ -179,7 +179,7 @@ class AppTypography {
     height: 1.5,
   );
 
-  static TextStyle muted = TextStyle(
+  static TextStyle muted = const TextStyle(
     color: AppColors.notionDarkGray,
     height: 1.5,
   );
