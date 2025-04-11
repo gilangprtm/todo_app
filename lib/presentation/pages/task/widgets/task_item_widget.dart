@@ -9,8 +9,9 @@ import '../../../providers/task/task_provider.dart';
 
 class TaskItemWidget extends StatelessWidget {
   final TodoModel todo;
+  final VoidCallback? onToggleStatus;
 
-  const TaskItemWidget({super.key, required this.todo});
+  const TaskItemWidget({super.key, required this.todo, this.onToggleStatus});
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +19,19 @@ class TaskItemWidget extends StatelessWidget {
       builder: (context, ref, child) {
         // Re-read the todo from the provider to get the latest state
         final todos = ref.watch(taskProvider.select((state) => state.todos));
-        final currentTodo = todos.firstWhere(
+
+        // Try to find in todos first, then in previousTodos
+        TodoModel currentTodo = todos.firstWhere(
           (t) => t.id == todo.id,
-          orElse: () => todo,
+          orElse: () {
+            final previousTodos = ref.watch(
+              taskProvider.select((state) => state.previousTodos),
+            );
+            return previousTodos.firstWhere(
+              (t) => t.id == todo.id,
+              orElse: () => todo,
+            );
+          },
         );
 
         // Format time
@@ -78,10 +89,15 @@ class TaskItemWidget extends StatelessWidget {
                       ),
                       child: Checkbox(
                         value: isCompleted,
-                        onChanged:
-                            (_) => ref
+                        onChanged: (_) {
+                          if (onToggleStatus != null) {
+                            onToggleStatus!();
+                          } else {
+                            ref
                                 .read(taskProvider.notifier)
-                                .toggleTodoStatus(currentTodo),
+                                .toggleTodoStatus(currentTodo);
+                          }
+                        },
                         shape: const CircleBorder(),
                       ),
                     ),
@@ -100,6 +116,10 @@ class TaskItemWidget extends StatelessWidget {
                                     : AppColors.getTextPrimaryColor(context),
                             decoration:
                                 isCompleted ? TextDecoration.lineThrough : null,
+                            fontWeight:
+                                isCompleted
+                                    ? FontWeight.normal
+                                    : FontWeight.w600,
                           ),
                         ),
                         const SizedBox(height: 2),
@@ -144,9 +164,18 @@ class TaskItemWidget extends StatelessWidget {
                             tag.name,
                             style: AppTypography.caption.copyWith(
                               color: Colors.white,
+                              decoration:
+                                  isCompleted
+                                      ? TextDecoration.lineThrough
+                                      : null,
                             ),
                           ),
-                          backgroundColor: tag.getColor(),
+                          backgroundColor:
+                              isCompleted
+                                  ? tag.getColor().withValues(
+                                    alpha: 0.6,
+                                  ) // Reduce opacity if completed
+                                  : tag.getColor(),
                           materialTapTargetSize:
                               MaterialTapTargetSize.shrinkWrap,
                           visualDensity: VisualDensity.compact,
@@ -160,6 +189,7 @@ class TaskItemWidget extends StatelessWidget {
                 ),
               ],
 
+              // Subtasks always visible
               if (currentTodo.subtasks.isNotEmpty) ...[
                 const SizedBox(height: 8),
                 ...currentTodo.subtasks.map((subtask) {
@@ -188,9 +218,11 @@ class TaskItemWidget extends StatelessWidget {
                             child: Checkbox(
                               value: subtask.isCompleted,
                               onChanged:
-                                  (_) => ref
-                                      .read(taskProvider.notifier)
-                                      .toggleSubtaskStatus(subtask),
+                                  isCompleted
+                                      ? null // Disable subtask toggling if parent task is completed
+                                      : (_) => ref
+                                          .read(taskProvider.notifier)
+                                          .toggleSubtaskStatus(subtask),
                               shape: const CircleBorder(),
                             ),
                           ),
@@ -200,11 +232,11 @@ class TaskItemWidget extends StatelessWidget {
                           subtask.title,
                           style: AppTypography.bodyText2.copyWith(
                             color:
-                                subtask.isCompleted
+                                subtask.isCompleted || isCompleted
                                     ? AppColors.getTextSecondaryColor(context)
                                     : AppColors.getTextPrimaryColor(context),
                             decoration:
-                                subtask.isCompleted
+                                subtask.isCompleted || isCompleted
                                     ? TextDecoration.lineThrough
                                     : null,
                           ),
@@ -226,6 +258,8 @@ class TaskItemWidget extends StatelessWidget {
                     style: AppTypography.bodyText2.copyWith(
                       color: AppColors.getTextSecondaryColor(context),
                       fontStyle: FontStyle.italic,
+                      decoration:
+                          isCompleted ? TextDecoration.lineThrough : null,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,

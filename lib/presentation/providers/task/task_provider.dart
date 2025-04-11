@@ -5,6 +5,6 @@ import 'task_state.dart';
 
 /// Provider for Task Screen
 final taskProvider = StateNotifierProvider<TaskNotifier, TaskState>((ref) {
-  final db = ref.watch(dbProvider);
-  return TaskNotifier(TaskState(), ref, db);
+  final todoService = ref.watch(todoServiceProvider);
+  return TaskNotifier(TaskState(), ref, todoService);
 });

@@ -1,18 +1,18 @@
 import '../../../core/base/base_state_notifier.dart';
-import '../../../data/datasource/local/db/db_local.dart';
 import '../../../data/models/subtask_model.dart';
-import '../../../data/models/tag_model.dart';
 import '../../../data/models/todo_model.dart';
+import '../../../data/datasource/local/services/todo_service.dart';
 import 'task_state.dart';
 
 class TaskNotifier extends BaseStateNotifier<TaskState> {
-  final DBLocal _db;
+  final TodoService _todoService;
 
-  TaskNotifier(super.initialState, super.ref, this._db);
+  TaskNotifier(super.initialState, super.ref, this._todoService);
 
   @override
   Future<void> onInit() async {
     await loadTodos();
+    await loadPreviousTodos();
   }
 
   // Load todos from the database
@@ -21,7 +21,13 @@ class TaskNotifier extends BaseStateNotifier<TaskState> {
       state = state.copyWith(isLoading: true);
 
       try {
-        final todos = await _fetchTodos();
+        List<TodoModel> todos;
+        if (state.filterByToday) {
+          todos = await _todoService.getTodosForToday();
+        } else {
+          todos = await _todoService.getTodosForDate(state.selectedDate);
+        }
+
         final completedCount = todos.where((todo) => todo.status == 2).length;
 
         state = state.copyWith(
@@ -35,6 +41,29 @@ class TaskNotifier extends BaseStateNotifier<TaskState> {
           error: e,
           stackTrace: stackTrace,
           isLoading: false,
+        );
+      }
+    });
+  }
+
+  // Load previous unfinished todos
+  Future<void> loadPreviousTodos() async {
+    await runAsync('loadPreviousTodos', () async {
+      state = state.copyWith(isLoadingPrevious: true);
+
+      try {
+        final previousTodos = await _todoService.getPreviousTodos();
+
+        state = state.copyWith(
+          previousTodos: previousTodos,
+          isLoadingPrevious: false,
+          clearError: true,
+        );
+      } catch (e, stackTrace) {
+        state = state.copyWith(
+          error: e,
+          stackTrace: stackTrace,
+          isLoadingPrevious: false,
         );
       }
     });
@@ -58,50 +87,87 @@ class TaskNotifier extends BaseStateNotifier<TaskState> {
       // Determine new status: 0 -> 1 -> 2 -> 0 (Pending -> In Progress -> Completed -> Pending)
       final newStatus = (todo.status + 1) % 3;
 
-      // Update the database
-      final updatedTodo = todo.copyWith(
-        status: newStatus,
-        updatedAt: DateTime.now(),
+      // Update the todo via service
+      final updatedTodo = await _todoService.updateTodoStatus(todo, newStatus);
+
+      // Update state with updated todo
+      List<TodoModel> updatedTodos = List.from(state.todos);
+      // Check if the todo is in the today's list
+      int todayIndex = updatedTodos.indexWhere((t) => t.id == todo.id);
+
+      List<TodoModel> updatedPreviousTodos = List.from(state.previousTodos);
+      // Check if the todo is in the previous list
+      int previousIndex = updatedPreviousTodos.indexWhere(
+        (t) => t.id == todo.id,
       );
 
-      await _db.update(DBLocal.tableTodo, updatedTodo.toMap(), 'id = ?', [
-        todo.id,
-      ]);
+      // Handle based on new status
+      if (newStatus == 2) {
+        // For completed tasks, update in today's list but remove from previous list
+        if (todayIndex != -1) {
+          // Update in place for today's tasks, even if completed
+          updatedTodos[todayIndex] = updatedTodo;
+        }
 
-      // Update local state without reloading all todos
-      final index = state.todos.indexWhere((t) => t.id == todo.id);
-      if (index != -1) {
-        final updatedTodos = List<TodoModel>.from(state.todos);
-        updatedTodos[index] = updatedTodo.copyWith(
-          subtasks: state.todos[index].subtasks,
-          tags: state.todos[index].tags,
-        );
+        // Remove from previous tasks if completed
+        if (previousIndex != -1) {
+          updatedPreviousTodos.removeAt(previousIndex);
+        }
+      } else {
+        // For non-completed, update in place
+        if (todayIndex != -1) {
+          updatedTodos[todayIndex] = updatedTodo;
+        }
+        if (previousIndex != -1) {
+          updatedPreviousTodos[previousIndex] = updatedTodo;
+        }
 
-        // Calculate the new completed count
-        final completedCount =
-            updatedTodos.where((todo) => todo.status == 2).length;
+        // If status is changed from completed back to non-completed
+        // we need to check if it should be added to a list
+        if (todo.status == 2) {
+          // Was completed, now it's not
+          DateTime now = DateTime.now();
+          DateTime todoDate = todo.dueDate ?? now;
 
-        state = state.copyWith(
-          todos: updatedTodos,
-          completedCount: completedCount,
-        );
+          // Check if it belongs to today's list
+          bool isToday =
+              todoDate.year == now.year &&
+              todoDate.month == now.month &&
+              todoDate.day == now.day;
+
+          if (isToday && todayIndex == -1 && state.filterByToday) {
+            // Add to today's list if not already there
+            updatedTodos.add(updatedTodo);
+          } else if (todoDate.isBefore(
+                DateTime(now.year, now.month, now.day),
+              ) &&
+              previousIndex == -1) {
+            // Add to previous list if it's from past and not already there
+            updatedPreviousTodos.add(updatedTodo);
+          }
+        }
       }
+
+      // Calculate the new completed count (for today's tasks only)
+      final completedCount =
+          updatedTodos.where((todo) => todo.status == 2).length;
+
+      state = state.copyWith(
+        todos: updatedTodos,
+        previousTodos: updatedPreviousTodos,
+        completedCount: completedCount,
+      );
     });
   }
 
   // Toggle a subtask's completion status
   Future<void> toggleSubtaskStatus(SubtaskModel subtask) async {
     await runAsync('toggleSubtaskStatus', () async {
-      // Create updated subtask
-      final updatedSubtask = subtask.copyWith(
-        isCompleted: !subtask.isCompleted,
-        updatedAt: DateTime.now(),
+      // Update subtask via service
+      final updatedSubtask = await _todoService.updateSubtaskStatus(
+        subtask,
+        !subtask.isCompleted,
       );
-
-      // Update in database
-      await _db.update(DBLocal.tableSubtask, updatedSubtask.toMap(), 'id = ?', [
-        subtask.id,
-      ]);
 
       // Update local state without reloading all todos
       final todoIndex = state.todos.indexWhere((t) => t.id == subtask.todoId);
@@ -119,7 +185,7 @@ class TaskNotifier extends BaseStateNotifier<TaskState> {
           // Update the todo with updated subtasks
           updatedTodos[todoIndex] = todo.copyWith(subtasks: subtasks);
 
-          // Calculate the new completed count (completedCount is for todos, not subtasks)
+          // Calculate the new completed count
           final completedCount =
               updatedTodos.where((todo) => todo.status == 2).length;
 
@@ -130,125 +196,5 @@ class TaskNotifier extends BaseStateNotifier<TaskState> {
         }
       }
     });
-  }
-
-  // Fetch todos with their subtasks and tags
-  Future<List<TodoModel>> _fetchTodos() async {
-    try {
-      // Get base todo items
-      String whereClause = '';
-      List<dynamic> whereArgs = [];
-
-      if (state.filterByToday) {
-        final today = DateTime.now();
-        final startOfDay =
-            DateTime(today.year, today.month, today.day).toIso8601String();
-        final endOfDay =
-            DateTime(
-              today.year,
-              today.month,
-              today.day,
-              23,
-              59,
-              59,
-            ).toIso8601String();
-
-        whereClause = 'due_date >= ? AND due_date <= ?';
-        whereArgs = [startOfDay, endOfDay];
-      } else {
-        final date = state.selectedDate;
-        final startOfDay =
-            DateTime(date.year, date.month, date.day).toIso8601String();
-        final endOfDay =
-            DateTime(
-              date.year,
-              date.month,
-              date.day,
-              23,
-              59,
-              59,
-            ).toIso8601String();
-
-        whereClause = 'due_date >= ? AND due_date <= ?';
-        whereArgs = [startOfDay, endOfDay];
-      }
-
-      List<Map<String, dynamic>> todoMaps;
-      if (whereClause.isNotEmpty) {
-        todoMaps = await _db.queryWhere(
-          DBLocal.tableTodo,
-          whereClause,
-          whereArgs,
-        );
-      } else {
-        todoMaps = await _db.queryAll(DBLocal.tableTodo);
-      }
-
-      // Convert to TodoModels
-      List<TodoModel> todos =
-          todoMaps.map((map) => TodoModel.fromMap(map)).toList();
-
-      // For each todo, get subtasks and tags
-      List<TodoModel> enrichedTodos = [];
-      for (var todo in todos) {
-        final subtasks = await _getSubtasksForTodo(todo.id!);
-        final tags = await _getTagsForTodo(todo.id!);
-
-        enrichedTodos.add(todo.copyWith(subtasks: subtasks, tags: tags));
-      }
-
-      return enrichedTodos;
-    } catch (e, stackTrace) {
-      logger.e(
-        'Error fetching todos',
-        error: e,
-        stackTrace: stackTrace,
-        tag: 'TaskNotifier',
-      );
-      rethrow;
-    }
-  }
-
-  // Get subtasks for a specific todo
-  Future<List<SubtaskModel>> _getSubtasksForTodo(int todoId) async {
-    try {
-      final subtaskMaps = await _db.queryWhere(
-        DBLocal.tableSubtask,
-        'todo_id = ?',
-        [todoId],
-      );
-
-      return subtaskMaps.map((map) => SubtaskModel.fromMap(map)).toList();
-    } catch (e) {
-      logger.e(
-        'Error fetching subtasks for todo $todoId',
-        error: e,
-        tag: 'TaskNotifier',
-      );
-      return [];
-    }
-  }
-
-  // Get tags for a specific todo
-  Future<List<TagModel>> _getTagsForTodo(int todoId) async {
-    try {
-      final tagMaps = await _db.rawQuery(
-        '''
-        SELECT t.* FROM ${DBLocal.tableTag} t
-        INNER JOIN ${DBLocal.tableTodoTag} tt ON t.id = tt.tag_id
-        WHERE tt.todo_id = ?
-      ''',
-        [todoId],
-      );
-
-      return tagMaps.map((map) => TagModel.fromMap(map)).toList();
-    } catch (e) {
-      logger.e(
-        'Error fetching tags for todo $todoId',
-        error: e,
-        tag: 'TaskNotifier',
-      );
-      return [];
-    }
   }
 }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/mahas/widget/mahas_tab.dart';
+import '../../../core/theme/app_color.dart';
 import '../../providers/task/task_provider.dart';
 import 'widgets/task_header_widget.dart';
 import 'widgets/task_progress_widget.dart';
-import 'widgets/task_list_header_widget.dart';
-import 'widgets/task_item_widget.dart';
-import 'widgets/task_empty_widget.dart';
-import 'widgets/task_loading_error_widget.dart';
+import 'widgets/today_tasks_tab.dart';
+import 'widgets/previous_tasks_tab.dart';
 
 class TaskPage extends StatelessWidget {
   const TaskPage({super.key});
@@ -17,55 +17,69 @@ class TaskPage extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: Consumer(
-            builder: (context, ref, child) {
-              final state = ref.watch(taskProvider);
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header with date, greeting and avatar - static part, no need for Consumer
+              const TaskHeaderWidget(),
 
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Header with date, greeting and avatar
-                  const TaskHeaderWidget(),
+              const SizedBox(height: 24),
 
-                  const SizedBox(height: 24),
-
-                  // Today's tasks progress section
-                  const TaskProgressWidget(),
-
-                  const SizedBox(height: 24),
-
-                  // Task list header
-                  const TaskListHeaderWidget(),
-
-                  const SizedBox(height: 16),
-
-                  // Loading and error states
-                  const TaskLoadingErrorWidget(),
-
-                  // Empty state
-                  if (!state.isLoading &&
-                      state.error == null &&
-                      state.todos.isEmpty)
-                    const Expanded(child: TaskEmptyWidget()),
-
-                  // Task list
-                  if (!state.isLoading &&
-                      state.error == null &&
-                      state.todos.isNotEmpty)
-                    Expanded(
-                      child: ListView.separated(
-                        itemCount: state.todos.length,
-                        separatorBuilder:
-                            (context, index) => const SizedBox(height: 12),
-                        itemBuilder: (context, index) {
-                          final todo = state.todos[index];
-                          return TaskItemWidget(todo: todo);
-                        },
-                      ),
+              // Only rebuild TaskProgressWidget when relevant data changes
+              Consumer(
+                builder: (context, ref, _) {
+                  // Select only the specific parts of state needed for this widget
+                  final completionPercentage = ref.watch(
+                    taskProvider.select((state) => state.completionPercentage),
+                  );
+                  final completionString = ref.watch(
+                    taskProvider.select(
+                      (state) => state.completionPercentageString,
                     ),
-                ],
-              );
-            },
+                  );
+                  final todos = ref.watch(
+                    taskProvider.select((state) => state.todos.length),
+                  );
+                  final completedCount = ref.watch(
+                    taskProvider.select((state) => state.completedCount),
+                  );
+                  final filterByToday = ref.watch(
+                    taskProvider.select((state) => state.filterByToday),
+                  );
+
+                  return TaskProgressWidget(
+                    completionPercentage: completionPercentage,
+                    completionString: completionString,
+                    taskCount: todos,
+                    completedCount: completedCount,
+                    filterByToday: filterByToday,
+                  );
+                },
+              ),
+
+              const SizedBox(height: 10),
+
+              // Tab bar section
+              Expanded(
+                child: MahasPillTabBar(
+                  tabLabels: const ['Hari Ini', 'Sebelumnya'],
+                  tabViews: const [
+                    // Today's tasks tab - using ConsumerWidget for efficient rebuilds
+                    TodayTasksTab(),
+
+                    // Previous tasks tab - using ConsumerWidget for efficient rebuilds
+                    PreviousTasksTab(),
+                  ],
+                  activeColor: AppColors.getTextPrimaryColor(context),
+                  backgroundColor: Colors.grey[200]!,
+                  activeTextColor: Colors.white,
+                  inactiveTextColor: AppColors.getTextSecondaryColor(context),
+                  height: 45,
+                  borderRadius: 15,
+                  padding: const EdgeInsets.all(4.0),
+                ),
+              ),
+            ],
           ),
         ),
       ),

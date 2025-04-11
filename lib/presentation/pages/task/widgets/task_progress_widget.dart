@@ -6,7 +6,20 @@ import '../../../../core/mahas/widget/mahas_card.dart';
 import '../../../providers/task/task_provider.dart';
 
 class TaskProgressWidget extends StatelessWidget {
-  const TaskProgressWidget({super.key});
+  final double? completionPercentage;
+  final String? completionString;
+  final int? taskCount;
+  final int? completedCount;
+  final bool? filterByToday;
+
+  const TaskProgressWidget({
+    super.key,
+    this.completionPercentage,
+    this.completionString,
+    this.taskCount,
+    this.completedCount,
+    this.filterByToday,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +27,14 @@ class TaskProgressWidget extends StatelessWidget {
       builder: (context, ref, child) {
         final state = ref.watch(taskProvider);
         final notifier = ref.read(taskProvider.notifier);
+
+        // Use provided values or fallback to the ones from state
+        final percentage = completionPercentage ?? state.completionPercentage;
+        final percentageString =
+            completionString ?? state.completionPercentageString;
+        final taskCountValue = taskCount ?? state.todos.length;
+        final completedCountValue = completedCount ?? state.completedCount;
+        final isFilterByToday = filterByToday ?? state.filterByToday;
 
         return MahasCustomizableCard(
           color: AppColors.getCardColor(context),
@@ -37,7 +58,7 @@ class TaskProgressWidget extends StatelessWidget {
                     child: Row(
                       children: [
                         Icon(
-                          state.filterByToday
+                          isFilterByToday
                               ? Icons.calendar_today
                               : Icons.calendar_view_month,
                           size: 16,
@@ -45,7 +66,7 @@ class TaskProgressWidget extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          state.filterByToday ? "Hari Ini" : "Semua Task",
+                          isFilterByToday ? "Hari Ini" : "Semua Task",
                           style: AppTypography.caption.copyWith(
                             color: AppColors.getTextSecondaryColor(context),
                           ),
@@ -64,14 +85,14 @@ class TaskProgressWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "${state.todos.length} Task",
+                          "$taskCountValue Task",
                           style: AppTypography.headline6.copyWith(
                             color: AppColors.getTextPrimaryColor(context),
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          "${state.completedCount} Selesai",
+                          "$completedCountValue Selesai",
                           style: AppTypography.bodyText2.copyWith(
                             color: AppColors.getTextSecondaryColor(context),
                           ),
@@ -84,7 +105,7 @@ class TaskProgressWidget extends StatelessWidget {
                     child: Column(
                       children: [
                         LinearProgressIndicator(
-                          value: state.completionPercentage,
+                          value: percentage,
                           backgroundColor: AppColors.getProgressBackgroundColor(
                             context,
                           ),
@@ -94,7 +115,7 @@ class TaskProgressWidget extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          state.completionPercentageString,
+                          percentageString,
                           style: AppTypography.caption.copyWith(
                             color: AppColors.getTextSecondaryColor(context),
                           ),
