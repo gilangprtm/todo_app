@@ -18,6 +18,21 @@ class OnboardingService extends BaseService {
           await _db.saveSetting('theme_mode', 'light');
           await _db.saveSetting('first_run', 'false');
 
+          // Create a sample todo to ensure we have data in the todo table
+          final now = DateTime.now();
+          final nowString = now.toIso8601String();
+
+          await _db.insert(DBLocal.tableTodo, {
+            'title': 'Welcome to Todo App!',
+            'description':
+                'This is your first todo item. Tap to edit or complete it.',
+            'due_date': now.add(const Duration(days: 1)).toIso8601String(),
+            'priority': 1,
+            'status': 0,
+            'created_at': nowString,
+            'updated_at': nowString,
+          });
+
           logger.d(
             'Database initialized successfully',
             tag: 'OnboardingService',

@@ -53,16 +53,20 @@ class MahasService {
       // Initialize database
       final db = DBLocal();
 
-      // Check if we have any data in the todo table
-      final hasData = await db.hasData(DBLocal.tableTodo);
-
-      // If no data exists, user needs to go through onboarding
-      if (!hasData) {
-        return AppRoutes.onboarding;
+      // Check if first_run is set to false in settings
+      final firstRunSetting = await db.getSetting('first_run');
+      if (firstRunSetting == 'false') {
+        return AppRoutes.home;
       }
 
-      // If data exists, user can go directly to home
-      return AppRoutes.home;
+      // Check if we have any data in the todo table
+      final hasData = await db.hasData(DBLocal.tableTodo);
+      if (hasData) {
+        return AppRoutes.home;
+      }
+
+      // If no settings or no todo data exists, user needs to go through onboarding
+      return AppRoutes.onboarding;
     } catch (e, stackTrace) {
       LoggerService.instance.e(
         '❌ Error determining initial route',
