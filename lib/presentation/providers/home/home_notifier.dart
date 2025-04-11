@@ -5,6 +5,14 @@ import 'home_state.dart';
 class HomeNotifier extends BaseStateNotifier<HomeState> {
   HomeNotifier(super.initialState, super.ref);
 
-  // Currently empty as the original HomeProvider doesn't have any functionality
-  // We can add methods here as needed in the future
+  /// Changes the selected menu index
+  void changeMenu(int index) {
+    logger.d('Changing menu index to $index', tag: 'HomeNotifier');
+    state = state.copyWith(selectedMenuIndex: index);
+  }
+
+  @override
+  Future<void> onInit() async {
+    logger.d('HomeNotifier initialized', tag: 'HomeNotifier');
+  }
 }

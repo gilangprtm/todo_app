@@ -1,10 +1,16 @@
 import '../../../../core/base/base_network.dart';
 import '../db/db_local.dart';
+import '../services/init_data_service.dart';
 
 class OnboardingService extends BaseService {
   final DBLocal _db;
+  final InitDataService _initDataService;
 
-  OnboardingService({required DBLocal db}) : _db = db;
+  OnboardingService({
+    required DBLocal db,
+    required InitDataService initDataService,
+  }) : _db = db,
+       _initDataService = initDataService;
 
   Future<void> initializeDatabase() async {
     try {
@@ -18,23 +24,11 @@ class OnboardingService extends BaseService {
           await _db.saveSetting('theme_mode', 'light');
           await _db.saveSetting('first_run', 'false');
 
-          // Create a sample todo to ensure we have data in the todo table
-          final now = DateTime.now();
-          final nowString = now.toIso8601String();
-
-          await _db.insert(DBLocal.tableTodo, {
-            'title': 'Welcome to Todo App!',
-            'description':
-                'This is your first todo item. Tap to edit or complete it.',
-            'due_date': now.add(const Duration(days: 1)).toIso8601String(),
-            'priority': 1,
-            'status': 0,
-            'created_at': nowString,
-            'updated_at': nowString,
-          });
+          // Initialize sample data using InitDataService
+          await _initDataService.initializeData();
 
           logger.d(
-            'Database initialized successfully',
+            'Database initialized successfully with sample data',
             tag: 'OnboardingService',
           );
         },
