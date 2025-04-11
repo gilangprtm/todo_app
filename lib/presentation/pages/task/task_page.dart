@@ -9,61 +9,65 @@ import 'widgets/task_item_widget.dart';
 import 'widgets/task_empty_widget.dart';
 import 'widgets/task_loading_error_widget.dart';
 
-class TaskPage extends ConsumerWidget {
+class TaskPage extends StatelessWidget {
   const TaskPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(taskProvider);
-
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.ghibliCream,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Header with date, greeting and avatar
-              const TaskHeaderWidget(),
+          child: Consumer(
+            builder: (context, ref, child) {
+              final state = ref.watch(taskProvider);
 
-              const SizedBox(height: 24),
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header with date, greeting and avatar
+                  const TaskHeaderWidget(),
 
-              // Today's tasks progress section
-              const TaskProgressWidget(),
+                  const SizedBox(height: 24),
 
-              const SizedBox(height: 24),
+                  // Today's tasks progress section
+                  const TaskProgressWidget(),
 
-              // Task list header
-              const TaskListHeaderWidget(),
+                  const SizedBox(height: 24),
 
-              const SizedBox(height: 16),
+                  // Task list header
+                  const TaskListHeaderWidget(),
 
-              // Loading and error states
-              const TaskLoadingErrorWidget(),
+                  const SizedBox(height: 16),
 
-              // Empty state
-              if (!state.isLoading &&
-                  state.error == null &&
-                  state.todos.isEmpty)
-                const Expanded(child: TaskEmptyWidget()),
+                  // Loading and error states
+                  const TaskLoadingErrorWidget(),
 
-              // Task list
-              if (!state.isLoading &&
-                  state.error == null &&
-                  state.todos.isNotEmpty)
-                Expanded(
-                  child: ListView.separated(
-                    itemCount: state.todos.length,
-                    separatorBuilder:
-                        (context, index) => const SizedBox(height: 12),
-                    itemBuilder: (context, index) {
-                      final todo = state.todos[index];
-                      return TaskItemWidget(todo: todo);
-                    },
-                  ),
-                ),
-            ],
+                  // Empty state
+                  if (!state.isLoading &&
+                      state.error == null &&
+                      state.todos.isEmpty)
+                    const Expanded(child: TaskEmptyWidget()),
+
+                  // Task list
+                  if (!state.isLoading &&
+                      state.error == null &&
+                      state.todos.isNotEmpty)
+                    Expanded(
+                      child: ListView.separated(
+                        itemCount: state.todos.length,
+                        separatorBuilder:
+                            (context, index) => const SizedBox(height: 12),
+                        itemBuilder: (context, index) {
+                          final todo = state.todos[index];
+                          return TaskItemWidget(todo: todo);
+                        },
+                      ),
+                    ),
+                ],
+              );
+            },
           ),
         ),
       ),
