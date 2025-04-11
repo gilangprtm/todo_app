@@ -39,11 +39,11 @@ class MahasSearchBar extends StatelessWidget {
                 : null,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppTheme.borderRadius),
-          borderSide: const BorderSide(color: AppColors.lightBorderColor),
+          borderSide: const BorderSide(color: AppColors.grey),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppTheme.borderRadius),
-          borderSide: const BorderSide(color: AppColors.lightBorderColor),
+          borderSide: const BorderSide(color: AppColors.grey),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppTheme.borderRadius),

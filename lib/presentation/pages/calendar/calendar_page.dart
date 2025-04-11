@@ -9,7 +9,6 @@ class CalendarPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: AppColors.ghibliCream,
       body: SafeArea(
         child: Center(
           child: Text(

@@ -28,7 +28,7 @@ class TaskProgressWidget extends StatelessWidget {
                   Text(
                     "Task Hari Ini",
                     style: AppTypography.subtitle1.copyWith(
-                      color: AppColors.notionBlack,
+                      color: AppColors.getTextPrimaryColor(context),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -41,13 +41,13 @@ class TaskProgressWidget extends StatelessWidget {
                               ? Icons.calendar_today
                               : Icons.calendar_view_month,
                           size: 16,
-                          color: AppColors.notionBlack.withOpacity(0.6),
+                          color: AppColors.getTextSecondaryColor(context),
                         ),
                         const SizedBox(width: 4),
                         Text(
                           state.filterByToday ? "Hari Ini" : "Semua Task",
                           style: AppTypography.caption.copyWith(
-                            color: AppColors.notionBlack.withOpacity(0.6),
+                            color: AppColors.getTextSecondaryColor(context),
                           ),
                         ),
                       ],
@@ -66,14 +66,14 @@ class TaskProgressWidget extends StatelessWidget {
                         Text(
                           "${state.todos.length} Task",
                           style: AppTypography.headline6.copyWith(
-                            color: AppColors.notionBlack,
+                            color: AppColors.getTextPrimaryColor(context),
                           ),
                         ),
                         const SizedBox(height: 4),
                         Text(
                           "${state.completedCount} Selesai",
                           style: AppTypography.bodyText2.copyWith(
-                            color: AppColors.notionBlack.withOpacity(0.6),
+                            color: AppColors.getTextSecondaryColor(context),
                           ),
                         ),
                       ],
@@ -94,7 +94,7 @@ class TaskProgressWidget extends StatelessWidget {
                         Text(
                           state.completionPercentageString,
                           style: AppTypography.caption.copyWith(
-                            color: AppColors.notionBlack.withOpacity(0.6),
+                            color: AppColors.getTextSecondaryColor(context),
                           ),
                         ),
                       ],

@@ -1,25 +1,111 @@
 import 'package:flutter/material.dart';
 
 /// A class that contains all the colors used in the application.
-/// This class provides a consistent color palette for both light and dark themes.
+/// This class provides a consistent color system following Notion's minimalist design.
 class AppColors {
-  // Ghibli-Notion Theme Colors
-  static const Color ghibliSkyBlue = Color(
-    0xFF7CB2D2,
-  ); // Soft sky blue like in Ghibli films
-  static const Color ghibliForestGreen = Color(
-    0xFF5A8268,
-  ); // Peaceful forest green
-  static const Color ghibliCream = Color(
-    0xFFF9F2E0,
-  ); // Warm cream common in Ghibli backgrounds
-  static const Color ghibliWarmOrange = Color(0xFFE58F65); // Warm sunset orange
-  static const Color ghibliDustyRose = Color(0xFFD16B54); // Dusty rose accent
-  static const Color ghibliStoneGray = Color(
-    0xFF6D7A72,
-  ); // Stone gray from Ghibli landscapes
+  // Base colors
+  static const Color white = Color(0xFFFFFFFF);
+  static const Color black = Color(0xFF000000);
 
-  // Notion-inspired UI colors
+  // Primary colors - Notion blue
+  static const Color primaryColor = Color(0xFF2F80ED);
+  static const Color primaryLightColor = Color(0xFFE6F0FF);
+  static const Color primaryDarkColor = Color(0xFF1A4B9A);
+
+  // Text colors
+  static const Color textPrimaryColor = Color(0xFF2F3437);
+  static const Color textSecondaryColor = Color(0xFF9B9B9B);
+  static const Color textTertiaryColor = Color(0xFFC4C4C4);
+  static const Color textInverseColor = Color(0xFFFFFFFF);
+
+  // Background colors
+  static const Color backgroundColor = Color(0xFFFFFFF8);
+  static const Color cardColor = Color(0xFFFFFFFF);
+  static const Color surfaceColor = Color(0xFFEBECEA);
+
+  // Border colors
+  static const Color borderColor = Color(0xFFE5E5E5);
+  static const Color dividerColor = Color(0xFFE5E5E5);
+
+  // Status colors
+  static const Color successColor = Color(0xFF4CAF50);
+  static const Color errorColor = Color(0xFFE53935);
+  static const Color warningColor = Color(0xFFFFA000);
+  static const Color infoColor = Color(0xFF2196F3);
+
+  // Neutral colors
+  static const Color grey = Color(0xFF9E9E9E);
+  static const Color greyLight = Color(0xFFF5F5F5);
+  static const Color greyDark = Color(0xFF616161);
+
+  // Dark theme colors
+  static const Color darkBackgroundColor = Color(0xFF232728);
+  static const Color darkCardColor = Color(0xFF2F3437);
+  static const Color darkSurfaceColor = Color(0xFF1A1D1E);
+  static const Color darkTextPrimaryColor = Color(0xFFF8F8F8);
+  static const Color darkTextSecondaryColor = Color(0xFF9B9B9B);
+  static const Color darkBorderColor = Color(0xFF3D3D3D);
+  static const Color darkDividerColor = Color(0xFF3D3D3D);
+
+  // Helper method to get theme-aware colors
+  static Color getBackgroundColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.light
+        ? backgroundColor
+        : darkBackgroundColor;
+  }
+
+  static Color getCardColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.light
+        ? cardColor
+        : darkCardColor;
+  }
+
+  static Color getTextPrimaryColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.light
+        ? textPrimaryColor
+        : darkTextPrimaryColor;
+  }
+
+  static Color getTextSecondaryColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.light
+        ? textSecondaryColor
+        : darkTextSecondaryColor;
+  }
+
+  static Color getBorderColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.light
+        ? borderColor
+        : darkBorderColor;
+  }
+
+  static Color getDividerColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.light
+        ? dividerColor
+        : darkDividerColor;
+  }
+
+  // Status Colors with Opacity
+  static Color successColorWithOpacity(double opacity) =>
+      successColor.withOpacity(opacity);
+  static Color errorColorWithOpacity(double opacity) =>
+      errorColor.withOpacity(opacity);
+  static Color warningColorWithOpacity(double opacity) =>
+      warningColor.withOpacity(opacity);
+  static Color infoColorWithOpacity(double opacity) =>
+      infoColor.withOpacity(opacity);
+
+  // Utility Colors
+  static const Color transparent = Colors.transparent;
+
+  // Disabled State Colors
+  static const Color disabledColor = Color(0xFFE5E5E5);
+  static const Color disabledTextColor = Color(0xFFAAAAAA);
+
+  // Overlay Colors
+  static const Color overlayColor = Color(0x80000000);
+  static const Color modalOverlayColor = Color(0x40000000);
+
+  // Notion-inspired UI colors for light theme
   static const Color notionWhite = Color(
     0xFFFFFFF8,
   ); // Slightly warmer white like Notion
@@ -28,111 +114,58 @@ class AppColors {
   static const Color notionDarkGray = Color(0xFF9B9B9B); // For secondary text
   static const Color notionBorder = Color(0xFFE5E5E5); // Subtle border color
 
-  // Primary Colors (Ghibli-Notion themed)
-  static const Color primaryColor = ghibliSkyBlue;
-  static const Color primaryLightColor = Color(0xFFA1CADE); // Lighter sky blue
-  static const Color primaryDarkColor = Color(0xFF5891B0); // Darker sky blue
+  // Notion-inspired UI colors for dark theme
+  static const Color notionDarkWhite = Color(
+    0xFFF8F8F8,
+  ); // Slightly warmer white like Notion
+  static const Color notionDarkBlack = Color(0xFF232728); // Darker black
+  static const Color notionDarkGrayDark = Color(
+    0xFFEBECEA,
+  ); // Light gray for surfaces
+  static const Color notionDarkDarkGray = Color(
+    0xFF9B9B9B,
+  ); // For secondary text
+  static const Color notionDarkBorder = Color(
+    0xFFE5E5E5,
+  ); // Subtle border color
 
-  // Secondary Colors
-  static const Color secondaryColor = ghibliForestGreen;
-  static const Color secondaryLightColor = Color(
-    0xFF7CA38A,
-  ); // Lighter forest green
-  static const Color accentColor = ghibliWarmOrange;
-
-  // Status Colors
-  static const Color errorColor = ghibliDustyRose;
-  static const Color successColor = Color(0xFF52A87D); // Green success
-  static const Color warningColor = Color(0xFFE6B450); // Warm yellow warning
-  static const Color infoColor = primaryColor;
-
-  // Status Colors with Opacity
-  static Color errorColorWithOpacity(double opacity) =>
-      errorColor.withValues(alpha: opacity);
-  static Color successColorWithOpacity(double opacity) =>
-      successColor.withValues(alpha: opacity);
-  static Color warningColorWithOpacity(double opacity) =>
-      warningColor.withValues(alpha: opacity);
-  static Color infoColorWithOpacity(double opacity) =>
-      infoColor.withValues(alpha: opacity);
-
-  // Utility Colors
-  static const Color transparent = Colors.transparent;
-  static const Color white = Colors.white;
-  static const Color black = Colors.black;
-  static const Color grey = Color(0xFFD3D3D3);
-
-  // Disabled State Colors
-  static const Color disabledColor = Color(0xFFE5E5E5);
-  static const Color disabledTextColor = Color(0xFFAAAAAA);
-
-  // Divider and Border Colors
-  static const Color dividerColor = notionBorder;
-  static const Color borderColor = notionBorder;
-
-  // Overlay Colors
-  static const Color overlayColor = Color(0x80000000);
-  static const Color modalOverlayColor = Color(0x40000000);
-
-  // Light Mode Colors
-  static const Color lightSecondaryColor = notionGray;
-  static const Color lightSecondaryLightColor = notionWhite;
-  static const Color lightSecondaryDarkColor = Color(0xFFE0E0E0);
-
-  static const Color lightBackgroundColor = notionWhite;
-  static const Color lightSurfaceColor = ghibliCream;
-  static const Color lightCardColor = notionWhite;
-
-  static const Color lightTextPrimaryColor = notionBlack;
-  static const Color lightTextSecondaryColor = notionDarkGray;
-
-  // Light Mode Additional Colors
-  static const Color lightDividerColor = notionBorder;
-  static const Color lightBorderColor = notionBorder;
-  static const Color lightDisabledColor = Color(0xFFEEEEEE);
-  static const Color lightDisabledTextColor = Color(0xFFB5B5B5);
-
-  // Dark Mode Colors
-  static const Color darkSecondaryColor = Color(0xFF2D3133);
-  static const Color darkSecondaryLightColor = Color(0xFF3A3E40);
-  static const Color darkSecondaryDarkColor = Color(0xFF232728);
-
-  static const Color darkBackgroundColor = Color(0xFF191C1E);
-  static const Color darkSurfaceColor = Color(0xFF2D3133);
-  static const Color darkCardColor = Color(0xFF2D3133);
-
-  static const Color darkTextPrimaryColor = Color(0xFFF7F6F3);
-  static const Color darkTextSecondaryColor = Color(0xFFB6B6B4);
-
-  // Dark Mode Additional Colors
-  static const Color darkDividerColor = Color(0xFF3A3E40);
-  static const Color darkBorderColor = Color(0xFF3A3E40);
-  static const Color darkDisabledColor = Color(0xFF3A3E40);
-  static const Color darkDisabledTextColor = Color(0xFF656565);
-
-  // Gradient Decorations
-  static BoxDecoration get ghibliSkyGradientDecoration => const BoxDecoration(
-    gradient: LinearGradient(
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-      colors: [
-        Color(0xFF85C7ED), // Light sky
-        ghibliSkyBlue,
-      ],
-    ),
-  );
-
-  // Ghibli-inspired pattern box decoration
-  static BoxDecoration get ghibliCardDecoration => BoxDecoration(
-    color: notionWhite,
+  // Card Decoration
+  static BoxDecoration get cardDecoration => BoxDecoration(
+    color: cardColor,
     boxShadow: [
       BoxShadow(
-        color: Colors.black.withValues(alpha: 0.07),
+        color: black.withOpacity(0.05),
         blurRadius: 8,
         offset: const Offset(0, 2),
       ),
     ],
-    border: Border.all(color: notionBorder, width: 1),
+    border: Border.all(color: borderColor, width: 1),
     borderRadius: BorderRadius.circular(12),
   );
+
+  // Input Decoration
+  static BoxDecoration get inputDecoration => BoxDecoration(
+    color: white,
+    border: Border.all(color: borderColor, width: 1),
+    borderRadius: BorderRadius.circular(8),
+  );
+
+  // Button Colors
+  static const Color buttonColor = primaryColor;
+  static const Color buttonTextColor = white;
+  static const Color buttonDisabledColor = disabledColor;
+  static const Color buttonDisabledTextColor = disabledTextColor;
+
+  // Icon Colors
+  static const Color iconColor = textPrimaryColor;
+  static const Color iconSecondaryColor = textSecondaryColor;
+  static const Color iconDisabledColor = disabledTextColor;
+
+  // Selection Colors
+  static const Color selectionColor = Color(0xFFE3F2FD); // Light blue
+  static const Color hoverColor = Color(0xFFF5F5F5); // Light gray
+
+  // Progress Colors
+  static const Color progressBackgroundColor = Color(0xFFE0E0E0);
+  static const Color progressColor = primaryColor;
 }

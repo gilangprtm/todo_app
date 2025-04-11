@@ -41,7 +41,6 @@ class HomePage extends ConsumerWidget {
       onTap: notifier.changeMenu,
       selectedIndex: state.selectedMenuIndex,
       menuType: MenuType.iconOnly,
-      backgroundColor: AppColors.ghibliCream,
       selectedColor: AppColors.notionBlack,
       unselectedColor: AppColors.notionBlack.withAlpha(120),
       showCenterButton: true,

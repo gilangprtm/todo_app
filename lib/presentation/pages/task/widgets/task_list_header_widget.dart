@@ -13,7 +13,7 @@ class TaskListHeaderWidget extends StatelessWidget {
         Text(
           "Daftar Task",
           style: AppTypography.subtitle1.copyWith(
-            color: AppColors.notionBlack,
+            color: AppColors.getTextPrimaryColor(context),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -32,7 +32,7 @@ class TaskListHeaderWidget extends StatelessWidget {
             Text(
               "Pending",
               style: AppTypography.caption.copyWith(
-                color: AppColors.notionBlack.withOpacity(0.6),
+                color: AppColors.getTextSecondaryColor(context),
               ),
             ),
             const SizedBox(width: 8),
@@ -48,7 +48,7 @@ class TaskListHeaderWidget extends StatelessWidget {
             Text(
               "In Progress",
               style: AppTypography.caption.copyWith(
-                color: AppColors.notionBlack.withOpacity(0.6),
+                color: AppColors.getTextSecondaryColor(context),
               ),
             ),
             const SizedBox(width: 8),
@@ -64,7 +64,7 @@ class TaskListHeaderWidget extends StatelessWidget {
             Text(
               "Completed",
               style: AppTypography.caption.copyWith(
-                color: AppColors.notionBlack.withOpacity(0.6),
+                color: AppColors.getTextSecondaryColor(context),
               ),
             ),
           ],

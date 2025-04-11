@@ -3,13 +3,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'app_color.dart';
 
 /// A class that contains all the typography styles used in the application.
-/// This class provides a consistent typography system for both light and dark themes.
+/// This class provides a consistent typography system following Notion's minimalist design.
 class AppTypography {
-  // Font families - Notion-like clean fonts with a hint of Ghibli warmth
+  // Font families - Notion-like clean fonts
   static final String headingFontFamily = GoogleFonts.notoSans().fontFamily!;
   static final String bodyFontFamily = GoogleFonts.lato().fontFamily!;
 
-  // Headline styles - Clean and minimal like Notion with Ghibli warmth
+  // Headline styles - Clean and minimal like Notion
   static TextStyle headline1 = TextStyle(
     fontFamily: headingFontFamily,
     fontSize: 40.0,
@@ -159,7 +159,7 @@ class AppTypography {
     fontFamily: bodyFontFamily,
     fontSize: 14.0,
     fontWeight: FontWeight.w500,
-    color: AppColors.ghibliStoneGray,
+    color: AppColors.textSecondaryColor,
     height: 1.2,
   );
 
@@ -180,7 +180,7 @@ class AppTypography {
   );
 
   static TextStyle muted = const TextStyle(
-    color: AppColors.notionDarkGray,
+    color: AppColors.textSecondaryColor,
     height: 1.5,
   );
 

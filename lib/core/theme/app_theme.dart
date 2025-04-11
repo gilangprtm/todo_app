@@ -4,12 +4,11 @@ import 'app_color.dart';
 import 'app_typografi.dart';
 
 /// A class that contains all the theme data used in the application.
-/// This class provides a consistent theme system for both light and dark modes.
+/// This class provides a consistent theme system following Notion's minimalist design.
 class AppTheme {
   // Common theme properties
-  static const double _borderRadius =
-      8.0; // Notion uses more subtle rounded corners
-  static const double _elevation = 1.0; // Notion uses subtle shadows
+  static const double _borderRadius = 8.0;
+  static const double _elevation = 1.0;
   static const double borderRadius = _borderRadius;
   static const double elevation = _elevation;
 
@@ -34,47 +33,46 @@ class AppTheme {
     borderRadius: BorderRadius.circular(_borderRadius),
   );
 
-  // Light Theme (Ghibli-Notion Theme)
+  // Light Theme (Notion-inspired)
   static final ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     fontFamily: AppTypography.bodyFontFamily,
     brightness: Brightness.light,
-    primaryColor: AppColors.ghibliSkyBlue,
+    primaryColor: AppColors.primaryColor,
     colorScheme: const ColorScheme.light(
-      primary: AppColors.ghibliSkyBlue,
+      primary: AppColors.primaryColor,
       primaryContainer: AppColors.primaryLightColor,
-      secondary: AppColors.ghibliForestGreen,
-      secondaryContainer: AppColors.secondaryLightColor,
-      tertiary: AppColors.ghibliWarmOrange,
-      surface: AppColors.notionWhite,
-      background: AppColors.notionWhite,
-      error: AppColors.ghibliDustyRose,
+      secondary: AppColors.textSecondaryColor,
+      secondaryContainer: AppColors.textTertiaryColor,
+      surface: AppColors.backgroundColor,
+      background: AppColors.backgroundColor,
+      error: AppColors.errorColor,
       onPrimary: Colors.white,
       onSecondary: Colors.white,
-      onSurface: AppColors.notionBlack,
+      onSurface: AppColors.textPrimaryColor,
       onError: Colors.white,
     ),
-    scaffoldBackgroundColor: AppColors.lightBackgroundColor,
-    cardColor: AppColors.lightCardColor,
+    scaffoldBackgroundColor: AppColors.backgroundColor,
+    cardColor: AppColors.cardColor,
     cardTheme: CardTheme(
-      color: AppColors.lightCardColor,
+      color: AppColors.cardColor,
       shape: _cardShape,
       elevation: _elevation,
-      shadowColor: AppColors.ghibliStoneGray.withOpacity(0.1),
+      shadowColor: AppColors.black.withOpacity(0.05),
     ),
     appBarTheme: AppBarTheme(
-      backgroundColor: AppColors.notionWhite,
-      foregroundColor: AppColors.notionBlack,
+      backgroundColor: AppColors.backgroundColor,
+      foregroundColor: AppColors.textPrimaryColor,
       titleTextStyle: AppTypography.headline6.copyWith(
-        color: AppColors.notionBlack,
+        color: AppColors.textPrimaryColor,
       ),
       elevation: 0,
-      shadowColor: AppColors.notionBlack.withOpacity(0.05),
+      shadowColor: AppColors.black.withOpacity(0.05),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: AppColors.notionWhite,
-      selectedItemColor: AppColors.ghibliSkyBlue,
-      unselectedItemColor: AppColors.notionDarkGray,
+      backgroundColor: AppColors.backgroundColor,
+      selectedItemColor: AppColors.primaryColor,
+      unselectedItemColor: AppColors.textSecondaryColor,
       type: BottomNavigationBarType.fixed,
       elevation: 4,
       selectedLabelStyle: AppTypography.caption.copyWith(
@@ -84,47 +82,47 @@ class AppTheme {
     ),
     textTheme: TextTheme(
       displayLarge: AppTypography.headline1.copyWith(
-        color: AppColors.lightTextPrimaryColor,
+        color: AppColors.textPrimaryColor,
       ),
       displayMedium: AppTypography.headline2.copyWith(
-        color: AppColors.lightTextPrimaryColor,
+        color: AppColors.textPrimaryColor,
       ),
       displaySmall: AppTypography.headline3.copyWith(
-        color: AppColors.lightTextPrimaryColor,
+        color: AppColors.textPrimaryColor,
       ),
       headlineMedium: AppTypography.headline4.copyWith(
-        color: AppColors.lightTextPrimaryColor,
+        color: AppColors.textPrimaryColor,
       ),
       headlineSmall: AppTypography.headline5.copyWith(
-        color: AppColors.lightTextPrimaryColor,
+        color: AppColors.textPrimaryColor,
       ),
       titleLarge: AppTypography.headline6.copyWith(
-        color: AppColors.lightTextPrimaryColor,
+        color: AppColors.textPrimaryColor,
       ),
       titleMedium: AppTypography.subtitle1.copyWith(
-        color: AppColors.lightTextPrimaryColor,
+        color: AppColors.textPrimaryColor,
       ),
       titleSmall: AppTypography.subtitle2.copyWith(
-        color: AppColors.lightTextSecondaryColor,
+        color: AppColors.textSecondaryColor,
       ),
       bodyLarge: AppTypography.bodyText1.copyWith(
-        color: AppColors.lightTextPrimaryColor,
+        color: AppColors.textPrimaryColor,
       ),
       bodyMedium: AppTypography.bodyText2.copyWith(
-        color: AppColors.lightTextSecondaryColor,
+        color: AppColors.textSecondaryColor,
       ),
       labelLarge: AppTypography.button.copyWith(color: Colors.white),
       bodySmall: AppTypography.caption.copyWith(
-        color: AppColors.lightTextSecondaryColor,
+        color: AppColors.textSecondaryColor,
       ),
       labelSmall: AppTypography.overline.copyWith(
-        color: AppColors.lightTextSecondaryColor,
+        color: AppColors.textSecondaryColor,
       ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white,
-        backgroundColor: AppColors.ghibliSkyBlue,
+        backgroundColor: AppColors.primaryColor,
         textStyle: AppTypography.button.copyWith(color: Colors.white),
         shape: _buttonShape,
         minimumSize: const Size(88, 44),
@@ -133,12 +131,12 @@ class AppTheme {
           vertical: spacing8,
         ),
         elevation: 1,
-        shadowColor: AppColors.ghibliSkyBlue.withOpacity(0.3),
+        shadowColor: AppColors.primaryColor.withOpacity(0.3),
       ),
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        foregroundColor: AppColors.ghibliSkyBlue,
+        foregroundColor: AppColors.primaryColor,
         textStyle: AppTypography.button,
         minimumSize: const Size(88, 40),
         shape: _buttonShape,
@@ -146,9 +144,9 @@ class AppTheme {
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        foregroundColor: AppColors.ghibliSkyBlue,
+        foregroundColor: AppColors.primaryColor,
         textStyle: AppTypography.button,
-        side: const BorderSide(color: AppColors.ghibliSkyBlue, width: 1.5),
+        side: const BorderSide(color: AppColors.primaryColor, width: 1.5),
         minimumSize: const Size(88, 44),
         shape: _buttonShape,
       ),
@@ -162,44 +160,41 @@ class AppTheme {
       ),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(_borderRadius),
-        borderSide: const BorderSide(color: AppColors.lightBorderColor),
+        borderSide: const BorderSide(color: AppColors.borderColor),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(_borderRadius),
-        borderSide: const BorderSide(color: AppColors.lightBorderColor),
+        borderSide: const BorderSide(color: AppColors.borderColor),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(_borderRadius),
-        borderSide: const BorderSide(
-          color: AppColors.ghibliSkyBlue,
-          width: 1.5,
-        ),
+        borderSide: const BorderSide(color: AppColors.primaryColor, width: 1.5),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(_borderRadius),
         borderSide: const BorderSide(color: AppColors.errorColor),
       ),
       labelStyle: AppTypography.formLabel.copyWith(
-        color: AppColors.lightTextSecondaryColor,
+        color: AppColors.textSecondaryColor,
       ),
       floatingLabelStyle: AppTypography.formLabel.copyWith(
-        color: AppColors.ghibliSkyBlue,
+        color: AppColors.primaryColor,
       ),
       errorStyle: AppTypography.caption.copyWith(color: AppColors.errorColor),
     ),
     dialogTheme: DialogTheme(
       shape: _dialogShape,
-      backgroundColor: AppColors.notionWhite,
+      backgroundColor: AppColors.backgroundColor,
       titleTextStyle: AppTypography.headline6.copyWith(
-        color: AppColors.lightTextPrimaryColor,
+        color: AppColors.textPrimaryColor,
       ),
       contentTextStyle: AppTypography.bodyText1.copyWith(
-        color: AppColors.lightTextPrimaryColor,
+        color: AppColors.textPrimaryColor,
       ),
       actionsPadding: const EdgeInsets.all(spacing16),
     ),
     snackBarTheme: SnackBarThemeData(
-      backgroundColor: AppColors.notionBlack,
+      backgroundColor: AppColors.primaryColor,
       contentTextStyle: AppTypography.bodyText1.copyWith(color: Colors.white),
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(
@@ -207,7 +202,7 @@ class AppTheme {
       ),
     ),
     bottomSheetTheme: const BottomSheetThemeData(
-      backgroundColor: AppColors.notionWhite,
+      backgroundColor: AppColors.backgroundColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(_borderRadius * 2),
@@ -215,17 +210,17 @@ class AppTheme {
       ),
     ),
     dividerTheme: const DividerThemeData(
-      color: AppColors.lightDividerColor,
+      color: AppColors.dividerColor,
       thickness: 1,
       space: 1,
     ),
     chipTheme: ChipThemeData(
-      backgroundColor: AppColors.lightSecondaryColor,
+      backgroundColor: AppColors.grey,
       labelStyle: AppTypography.bodyText2.copyWith(
-        color: AppColors.lightTextPrimaryColor,
+        color: AppColors.textPrimaryColor,
       ),
-      selectedColor: AppColors.ghibliSkyBlue,
-      secondarySelectedColor: AppColors.ghibliSkyBlue,
+      selectedColor: AppColors.primaryColor,
+      secondarySelectedColor: AppColors.primaryColor,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(_borderRadius),
@@ -234,30 +229,30 @@ class AppTheme {
     checkboxTheme: CheckboxThemeData(
       fillColor: MaterialStateProperty.resolveWith((states) {
         if (states.contains(MaterialState.selected)) {
-          return AppColors.ghibliSkyBlue;
+          return AppColors.primaryColor;
         }
-        return AppColors.lightTextSecondaryColor;
+        return AppColors.textSecondaryColor;
       }),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
     ),
     tabBarTheme: TabBarTheme(
-      labelColor: AppColors.ghibliSkyBlue,
-      unselectedLabelColor: AppColors.notionDarkGray,
+      labelColor: AppColors.primaryColor,
+      unselectedLabelColor: AppColors.textSecondaryColor,
       labelStyle: AppTypography.button,
       unselectedLabelStyle: AppTypography.button,
       indicator: const BoxDecoration(
         border: Border(
-          bottom: BorderSide(color: AppColors.ghibliSkyBlue, width: 2),
+          bottom: BorderSide(color: AppColors.primaryColor, width: 2),
         ),
       ),
     ),
     progressIndicatorTheme: const ProgressIndicatorThemeData(
-      color: AppColors.ghibliSkyBlue,
-      circularTrackColor: AppColors.lightBackgroundColor,
-      linearTrackColor: AppColors.lightBackgroundColor,
+      color: AppColors.primaryColor,
+      circularTrackColor: AppColors.backgroundColor,
+      linearTrackColor: AppColors.backgroundColor,
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: AppColors.ghibliSkyBlue,
+      backgroundColor: AppColors.primaryColor,
       foregroundColor: Colors.white,
       elevation: 2,
       highlightElevation: 4,
@@ -268,24 +263,23 @@ class AppTheme {
     visualDensity: VisualDensity.adaptivePlatformDensity,
   );
 
-  // Dark Theme (Dark Notion-Ghibli Theme)
+  // Dark Theme (Notion-inspired)
   static final ThemeData darkTheme = ThemeData(
     useMaterial3: true,
     fontFamily: AppTypography.bodyFontFamily,
     brightness: Brightness.dark,
-    primaryColor: AppColors.ghibliSkyBlue,
+    primaryColor: AppColors.primaryColor,
     colorScheme: const ColorScheme.dark(
-      primary: AppColors.ghibliSkyBlue,
+      primary: AppColors.primaryColor,
       primaryContainer: AppColors.primaryDarkColor,
-      secondary: AppColors.secondaryLightColor,
-      secondaryContainer: AppColors.ghibliForestGreen,
-      tertiary: AppColors.ghibliWarmOrange,
-      surface: AppColors.darkSurfaceColor,
+      secondary: AppColors.darkTextSecondaryColor,
+      secondaryContainer: AppColors.textTertiaryColor,
+      surface: AppColors.darkBackgroundColor,
       background: AppColors.darkBackgroundColor,
-      error: AppColors.ghibliDustyRose,
+      error: AppColors.errorColor,
       onPrimary: Colors.white,
       onSecondary: Colors.white,
-      onSurface: Colors.white,
+      onSurface: AppColors.darkTextPrimaryColor,
       onError: Colors.white,
     ),
     scaffoldBackgroundColor: AppColors.darkBackgroundColor,
@@ -294,28 +288,72 @@ class AppTheme {
       color: AppColors.darkCardColor,
       shape: _cardShape,
       elevation: _elevation,
-      shadowColor: Colors.black.withOpacity(0.2),
+      shadowColor: AppColors.black.withOpacity(0.2),
     ),
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.darkBackgroundColor,
-      foregroundColor: Colors.white,
-      titleTextStyle: AppTypography.headline6.copyWith(color: Colors.white),
+      foregroundColor: AppColors.darkTextPrimaryColor,
+      titleTextStyle: AppTypography.headline6.copyWith(
+        color: AppColors.darkTextPrimaryColor,
+      ),
       elevation: 0,
+      shadowColor: AppColors.black.withOpacity(0.2),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: AppColors.darkCardColor,
-      selectedItemColor: AppColors.ghibliSkyBlue,
+      backgroundColor: AppColors.darkBackgroundColor,
+      selectedItemColor: AppColors.primaryColor,
       unselectedItemColor: AppColors.darkTextSecondaryColor,
+      type: BottomNavigationBarType.fixed,
+      elevation: 4,
       selectedLabelStyle: AppTypography.caption.copyWith(
         fontWeight: FontWeight.w600,
       ),
       unselectedLabelStyle: AppTypography.caption,
     ),
+    textTheme: TextTheme(
+      displayLarge: AppTypography.headline1.copyWith(
+        color: AppColors.darkTextPrimaryColor,
+      ),
+      displayMedium: AppTypography.headline2.copyWith(
+        color: AppColors.darkTextPrimaryColor,
+      ),
+      displaySmall: AppTypography.headline3.copyWith(
+        color: AppColors.darkTextPrimaryColor,
+      ),
+      headlineMedium: AppTypography.headline4.copyWith(
+        color: AppColors.darkTextPrimaryColor,
+      ),
+      headlineSmall: AppTypography.headline5.copyWith(
+        color: AppColors.darkTextPrimaryColor,
+      ),
+      titleLarge: AppTypography.headline6.copyWith(
+        color: AppColors.darkTextPrimaryColor,
+      ),
+      titleMedium: AppTypography.subtitle1.copyWith(
+        color: AppColors.darkTextPrimaryColor,
+      ),
+      titleSmall: AppTypography.subtitle2.copyWith(
+        color: AppColors.darkTextSecondaryColor,
+      ),
+      bodyLarge: AppTypography.bodyText1.copyWith(
+        color: AppColors.darkTextPrimaryColor,
+      ),
+      bodyMedium: AppTypography.bodyText2.copyWith(
+        color: AppColors.darkTextSecondaryColor,
+      ),
+      labelLarge: AppTypography.button.copyWith(color: Colors.white),
+      bodySmall: AppTypography.caption.copyWith(
+        color: AppColors.darkTextSecondaryColor,
+      ),
+      labelSmall: AppTypography.overline.copyWith(
+        color: AppColors.darkTextSecondaryColor,
+      ),
+    ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white,
-        backgroundColor: AppColors.ghibliSkyBlue,
-        textStyle: AppTypography.button,
+        backgroundColor: AppColors.primaryColor,
+        textStyle: AppTypography.button.copyWith(color: Colors.white),
         shape: _buttonShape,
         minimumSize: const Size(88, 44),
         padding: const EdgeInsets.symmetric(
@@ -323,35 +361,133 @@ class AppTheme {
           vertical: spacing8,
         ),
         elevation: 1,
-        shadowColor: AppColors.ghibliSkyBlue.withOpacity(0.4),
+        shadowColor: AppColors.primaryColor.withOpacity(0.3),
       ),
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        foregroundColor: AppColors.ghibliSkyBlue,
+        foregroundColor: AppColors.primaryColor,
         textStyle: AppTypography.button,
+        minimumSize: const Size(88, 40),
+        shape: _buttonShape,
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        foregroundColor: AppColors.ghibliSkyBlue,
-        side: const BorderSide(color: AppColors.ghibliSkyBlue),
+        foregroundColor: AppColors.primaryColor,
         textStyle: AppTypography.button,
+        side: const BorderSide(color: AppColors.primaryColor, width: 1.5),
+        minimumSize: const Size(88, 44),
+        shape: _buttonShape,
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: AppColors.darkSurfaceColor,
+      fillColor: AppColors.darkCardColor,
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: spacing16,
+        vertical: spacing12,
+      ),
       border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(_borderRadius),
+        borderSide: const BorderSide(color: AppColors.darkBorderColor),
+      ),
+      enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(_borderRadius),
         borderSide: const BorderSide(color: AppColors.darkBorderColor),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(_borderRadius),
-        borderSide: const BorderSide(
-          color: AppColors.ghibliSkyBlue,
-          width: 1.5,
+        borderSide: const BorderSide(color: AppColors.primaryColor, width: 1.5),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(_borderRadius),
+        borderSide: const BorderSide(color: AppColors.errorColor),
+      ),
+      labelStyle: AppTypography.formLabel.copyWith(
+        color: AppColors.darkTextSecondaryColor,
+      ),
+      floatingLabelStyle: AppTypography.formLabel.copyWith(
+        color: AppColors.primaryColor,
+      ),
+      errorStyle: AppTypography.caption.copyWith(color: AppColors.errorColor),
+    ),
+    dialogTheme: DialogTheme(
+      shape: _dialogShape,
+      backgroundColor: AppColors.darkBackgroundColor,
+      titleTextStyle: AppTypography.headline6.copyWith(
+        color: AppColors.darkTextPrimaryColor,
+      ),
+      contentTextStyle: AppTypography.bodyText1.copyWith(
+        color: AppColors.darkTextPrimaryColor,
+      ),
+      actionsPadding: const EdgeInsets.all(spacing16),
+    ),
+    snackBarTheme: SnackBarThemeData(
+      backgroundColor: AppColors.primaryColor,
+      contentTextStyle: AppTypography.bodyText1.copyWith(color: Colors.white),
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(_borderRadius),
+      ),
+    ),
+    bottomSheetTheme: const BottomSheetThemeData(
+      backgroundColor: AppColors.darkBackgroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(_borderRadius * 2),
         ),
+      ),
+    ),
+    dividerTheme: const DividerThemeData(
+      color: AppColors.darkDividerColor,
+      thickness: 1,
+      space: 1,
+    ),
+    chipTheme: ChipThemeData(
+      backgroundColor: AppColors.greyDark,
+      labelStyle: AppTypography.bodyText2.copyWith(
+        color: AppColors.darkTextPrimaryColor,
+      ),
+      selectedColor: AppColors.primaryColor,
+      secondarySelectedColor: AppColors.primaryColor,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(_borderRadius),
+      ),
+    ),
+    checkboxTheme: CheckboxThemeData(
+      fillColor: MaterialStateProperty.resolveWith((states) {
+        if (states.contains(MaterialState.selected)) {
+          return AppColors.primaryColor;
+        }
+        return AppColors.darkTextSecondaryColor;
+      }),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+    ),
+    tabBarTheme: TabBarTheme(
+      labelColor: AppColors.primaryColor,
+      unselectedLabelColor: AppColors.darkTextSecondaryColor,
+      labelStyle: AppTypography.button,
+      unselectedLabelStyle: AppTypography.button,
+      indicator: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: AppColors.primaryColor, width: 2),
+        ),
+      ),
+    ),
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
+      color: AppColors.primaryColor,
+      circularTrackColor: AppColors.darkBackgroundColor,
+      linearTrackColor: AppColors.darkBackgroundColor,
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: AppColors.primaryColor,
+      foregroundColor: Colors.white,
+      elevation: 2,
+      highlightElevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(_borderRadius),
       ),
     ),
     visualDensity: VisualDensity.adaptivePlatformDensity,

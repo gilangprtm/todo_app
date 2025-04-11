@@ -34,7 +34,6 @@ class OnboardingPage extends StatelessWidget {
     ];
 
     return Scaffold(
-      backgroundColor: AppColors.ghibliCream,
       body: SafeArea(
         child: Column(
           children: [
@@ -170,7 +169,7 @@ class OnboardingPage extends StatelessWidget {
           Text(
             title,
             style: AppTypography.headline5.copyWith(
-              color: AppColors.notionBlack,
+              color: AppColors.getTextPrimaryColor(context),
             ),
             textAlign: TextAlign.center,
           ),
@@ -178,7 +177,7 @@ class OnboardingPage extends StatelessWidget {
           Text(
             description,
             style: AppTypography.bodyText1.copyWith(
-              color: AppColors.notionBlack.withValues(alpha: 0.8),
+              color: AppColors.getTextSecondaryColor(context),
             ),
             textAlign: TextAlign.center,
           ),
