@@ -41,8 +41,8 @@ class HomePage extends ConsumerWidget {
       onTap: notifier.changeMenu,
       selectedIndex: state.selectedMenuIndex,
       menuType: MenuType.iconOnly,
-      selectedColor: AppColors.notionBlack,
-      unselectedColor: AppColors.notionBlack.withAlpha(120),
+      selectedColor: AppColors.getTextPrimaryColor(context),
+      unselectedColor: AppColors.getTextSecondaryColor(context),
       showCenterButton: true,
       centerButton: FloatingActionButton(
         onPressed: () {
@@ -53,8 +53,8 @@ class HomePage extends ConsumerWidget {
             child: const AddTaskPage(),
           );
         },
-        backgroundColor: AppColors.notionBlack,
-        child: const Icon(Icons.add, color: Colors.white),
+        backgroundColor: AppColors.getTextPrimaryColor(context),
+        child: Icon(Icons.add, color: AppColors.getCardColor(context)),
       ),
       centerButtonPosition: CenterButtonPosition.aboveCenter,
     );

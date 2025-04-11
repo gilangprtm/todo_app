@@ -14,20 +14,20 @@ class TaskEmptyWidget extends StatelessWidget {
           Icon(
             Icons.check_circle_outline,
             size: 64,
-            color: AppColors.notionBlack.withOpacity(0.5),
+            color: AppColors.getTextSecondaryColor(context),
           ),
           const SizedBox(height: 16),
           Text(
             "Tidak ada task hari ini",
             style: AppTypography.headline6.copyWith(
-              color: AppColors.notionBlack,
+              color: AppColors.getTextPrimaryColor(context),
             ),
           ),
           const SizedBox(height: 8),
           Text(
             "Tambahkan task baru dengan tombol + di bawah",
             style: AppTypography.bodyText2.copyWith(
-              color: AppColors.notionBlack.withOpacity(0.6),
+              color: AppColors.getTextSecondaryColor(context),
             ),
             textAlign: TextAlign.center,
           ),

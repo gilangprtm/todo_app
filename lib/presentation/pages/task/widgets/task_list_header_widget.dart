@@ -23,8 +23,8 @@ class TaskListHeaderWidget extends StatelessWidget {
             Container(
               width: 10,
               height: 10,
-              decoration: const BoxDecoration(
-                color: Colors.grey,
+              decoration: BoxDecoration(
+                color: AppColors.getStatusColor(context, 0),
                 shape: BoxShape.circle,
               ),
             ),
@@ -39,8 +39,8 @@ class TaskListHeaderWidget extends StatelessWidget {
             Container(
               width: 10,
               height: 10,
-              decoration: const BoxDecoration(
-                color: Colors.blue,
+              decoration: BoxDecoration(
+                color: AppColors.getStatusColor(context, 1),
                 shape: BoxShape.circle,
               ),
             ),
@@ -55,8 +55,8 @@ class TaskListHeaderWidget extends StatelessWidget {
             Container(
               width: 10,
               height: 10,
-              decoration: const BoxDecoration(
-                color: Colors.green,
+              decoration: BoxDecoration(
+                color: AppColors.getStatusColor(context, 2),
                 shape: BoxShape.circle,
               ),
             ),

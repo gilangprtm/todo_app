@@ -29,26 +29,22 @@ class TaskItemWidget extends StatelessWidget {
           timeText = DateFormat('HH:mm').format(currentTodo.dueDate!);
         }
 
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+
         // Get card color based on status
-        Color cardColor = Colors.white;
-        if (currentTodo.status == 1) {
-          // In Progress
-          cardColor = Colors.blue.withOpacity(0.05);
-        } else if (currentTodo.status == 2) {
-          // Completed
-          cardColor = Colors.green.withOpacity(0.05);
-        }
+        final cardColor = AppColors.getStatusBackgroundColor(
+          context,
+          currentTodo.status,
+        );
 
         // Check if completed
         final isCompleted = currentTodo.status == 2;
 
         // Get checkbox color based on current status
-        Color currentCheckboxColor = Colors.grey;
-        if (currentTodo.status == 1) {
-          currentCheckboxColor = Colors.blue;
-        } else if (currentTodo.status == 2) {
-          currentCheckboxColor = Colors.green;
-        }
+        final currentCheckboxColor = AppColors.getStatusColor(
+          context,
+          currentTodo.status,
+        );
 
         // Get current status text
         String currentStatusText = '';
@@ -100,8 +96,8 @@ class TaskItemWidget extends StatelessWidget {
                           style: AppTypography.subtitle1.copyWith(
                             color:
                                 isCompleted
-                                    ? AppColors.notionBlack.withOpacity(0.5)
-                                    : AppColors.notionBlack,
+                                    ? AppColors.getTextSecondaryColor(context)
+                                    : AppColors.getTextPrimaryColor(context),
                             decoration:
                                 isCompleted ? TextDecoration.lineThrough : null,
                           ),
@@ -121,17 +117,17 @@ class TaskItemWidget extends StatelessWidget {
                     Text(
                       timeText,
                       style: AppTypography.caption.copyWith(
-                        color: AppColors.notionBlack.withOpacity(0.6),
+                        color: AppColors.getTextSecondaryColor(context),
                       ),
                     ),
                   ],
                   if (currentTodo.priority == 2) ...[
                     // High priority
                     const SizedBox(width: 8),
-                    const Icon(
+                    Icon(
                       Icons.priority_high,
                       size: 18,
-                      color: Colors.red,
+                      color: isDark ? Colors.red[300] : Colors.red,
                     ),
                   ],
                 ],
@@ -174,13 +170,29 @@ class TaskItemWidget extends StatelessWidget {
                         SizedBox(
                           width: 20,
                           height: 20,
-                          child: Checkbox(
-                            value: subtask.isCompleted,
-                            onChanged:
-                                (_) => ref
-                                    .read(taskProvider.notifier)
-                                    .toggleSubtaskStatus(subtask),
-                            shape: const CircleBorder(),
+                          child: Theme(
+                            data: ThemeData(
+                              checkboxTheme: CheckboxThemeData(
+                                fillColor: MaterialStateProperty.resolveWith(
+                                  (states) =>
+                                      subtask.isCompleted
+                                          ? (isDark
+                                              ? Colors.green[300]
+                                              : Colors.green)
+                                          : (isDark
+                                              ? Colors.grey[700]
+                                              : Colors.grey[400]),
+                                ),
+                              ),
+                            ),
+                            child: Checkbox(
+                              value: subtask.isCompleted,
+                              onChanged:
+                                  (_) => ref
+                                      .read(taskProvider.notifier)
+                                      .toggleSubtaskStatus(subtask),
+                              shape: const CircleBorder(),
+                            ),
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -189,8 +201,8 @@ class TaskItemWidget extends StatelessWidget {
                           style: AppTypography.bodyText2.copyWith(
                             color:
                                 subtask.isCompleted
-                                    ? AppColors.notionBlack.withOpacity(0.4)
-                                    : AppColors.notionBlack,
+                                    ? AppColors.getTextSecondaryColor(context)
+                                    : AppColors.getTextPrimaryColor(context),
                             decoration:
                                 subtask.isCompleted
                                     ? TextDecoration.lineThrough
@@ -212,7 +224,7 @@ class TaskItemWidget extends StatelessWidget {
                   child: Text(
                     currentTodo.description!,
                     style: AppTypography.bodyText2.copyWith(
-                      color: AppColors.notionBlack.withOpacity(0.6),
+                      color: AppColors.getTextSecondaryColor(context),
                       fontStyle: FontStyle.italic,
                     ),
                     maxLines: 2,

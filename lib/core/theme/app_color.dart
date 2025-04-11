@@ -94,6 +94,60 @@ class AppColors {
   static Color infoColorWithOpacity(double opacity) =>
       infoColor.withOpacity(opacity);
 
+  // Task Status Colors
+  static Color getStatusColor(BuildContext context, int status) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    switch (status) {
+      case 0: // Pending
+        return isDark ? Colors.grey[700]! : Colors.grey[400]!;
+      case 1: // In Progress
+        return isDark ? Colors.blue[300]! : Colors.blue;
+      case 2: // Completed
+        return isDark ? Colors.green[300]! : Colors.green;
+      default:
+        return isDark ? Colors.grey[700]! : Colors.grey[400]!;
+    }
+  }
+
+  static Color getStatusBackgroundColor(BuildContext context, int status) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    switch (status) {
+      case 1: // In Progress
+        return isDark
+            ? Colors.blue.withOpacity(0.15)
+            : Colors.blue.withOpacity(0.05);
+      case 2: // Completed
+        return isDark
+            ? Colors.green.withOpacity(0.15)
+            : Colors.green.withOpacity(0.05);
+      default:
+        return getCardColor(context);
+    }
+  }
+
+  // Progress Indicator Colors
+  static Color getProgressBackgroundColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.light
+        ? const Color(0xFFE0E0E0)
+        : const Color(0xFF424242);
+  }
+
+  static Color getProgressForegroundColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.light
+        ? const Color(0xFF4CAF50)
+        : const Color(0xFF66BB6A);
+  }
+
+  // Priority Colors
+  static Color getPriorityColor(BuildContext context, int priority) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    if (priority == 2) {
+      // High priority
+      return isDark ? Colors.red[300]! : Colors.red;
+    }
+    return getTextSecondaryColor(context);
+  }
+
   // Utility Colors
   static const Color transparent = Colors.transparent;
 

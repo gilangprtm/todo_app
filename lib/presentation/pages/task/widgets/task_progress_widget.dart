@@ -16,7 +16,7 @@ class TaskProgressWidget extends StatelessWidget {
         final notifier = ref.read(taskProvider.notifier);
 
         return MahasCustomizableCard(
-          color: Colors.white,
+          color: AppColors.getCardColor(context),
           padding: 16.0,
           margin: 0,
           child: Column(
@@ -85,8 +85,10 @@ class TaskProgressWidget extends StatelessWidget {
                       children: [
                         LinearProgressIndicator(
                           value: state.completionPercentage,
-                          backgroundColor: const Color(0xFFE0E0E0),
-                          color: const Color(0xFF4CAF50),
+                          backgroundColor: AppColors.getProgressBackgroundColor(
+                            context,
+                          ),
+                          color: AppColors.getProgressForegroundColor(context),
                           minHeight: 6,
                           borderRadius: BorderRadius.circular(4),
                         ),
