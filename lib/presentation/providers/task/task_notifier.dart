@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/base/base_state_notifier.dart';
 import '../../../data/datasource/local/db/db_local.dart';
 import '../../../data/models/subtask_model.dart';
@@ -156,7 +155,7 @@ class TaskNotifier extends BaseStateNotifier<TaskState> {
 
         whereClause = 'due_date >= ? AND due_date <= ?';
         whereArgs = [startOfDay, endOfDay];
-      } else if (state.selectedDate != null) {
+      } else {
         final date = state.selectedDate;
         final startOfDay =
             DateTime(date.year, date.month, date.day).toIso8601String();

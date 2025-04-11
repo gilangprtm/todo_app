@@ -36,27 +36,47 @@ class HomePage extends ConsumerWidget {
     ];
 
     return MahasMenuBar(
+      bottomPadding: 0,
       items: menuItems,
       pages: pages,
       onTap: notifier.changeMenu,
       selectedIndex: state.selectedMenuIndex,
       menuType: MenuType.iconOnly,
+      textVisibility: TextVisibility.hideAllText,
+      backgroundColor: AppColors.getCardColor(context).withValues(alpha: 0.8),
       selectedColor: AppColors.getTextPrimaryColor(context),
       unselectedColor: AppColors.getTextSecondaryColor(context),
       showCenterButton: true,
-      centerButton: FloatingActionButton(
-        onPressed: () {
-          MahasBottomSheet.show(
-            context: context,
-            title: 'Add New Task',
-            height: MediaQuery.of(context).size.height * 0.55,
-            child: const AddTaskPage(),
-          );
-        },
-        backgroundColor: AppColors.getTextPrimaryColor(context),
-        child: Icon(Icons.add, color: AppColors.getCardColor(context)),
+      centerButton: Container(
+        width: 45,
+        height: 45,
+        decoration: BoxDecoration(
+          color: AppColors.getTextPrimaryColor(context),
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.getTextPrimaryColor(
+                context,
+              ).withValues(alpha: 0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: IconButton(
+          icon: const Icon(Icons.add, size: 30),
+          color: AppColors.getCardColor(context),
+          onPressed: () {
+            MahasBottomSheet.show(
+              context: context,
+              title: 'Add New Task',
+              height: MediaQuery.of(context).size.height * 0.55,
+              child: const AddTaskPage(),
+            );
+          },
+        ),
       ),
-      centerButtonPosition: CenterButtonPosition.aboveCenter,
+      centerButtonPosition: CenterButtonPosition.center,
     );
   }
 }

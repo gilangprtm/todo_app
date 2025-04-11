@@ -31,7 +31,7 @@ class MahasAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color? backgroundColor = Theme.of(context).dialogBackgroundColor;
+    Color? backgroundColor = Theme.of(context).dialogTheme.backgroundColor;
     Color? iconColor;
     IconData iconData;
     String title = '';
@@ -78,16 +78,15 @@ class MahasAlertDialog extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                        fontWeight: FontWeight.bold, color: iconColor),
+                      fontWeight: FontWeight.bold,
+                      color: iconColor,
+                    ),
                   ),
                 ],
               ),
             ),
             if (content != null)
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: content!,
-              ),
+              Padding(padding: const EdgeInsets.all(10), child: content!),
             if (!showNegativeButton && !showPositiveButton)
               const SizedBox(height: 16),
             if ((showNegativeButton || showPositiveButton) && content != null)
@@ -96,22 +95,24 @@ class MahasAlertDialog extends StatelessWidget {
                 children: <Widget>[
                   if (showNegativeButton)
                     TextButton(
-                      onPressed: onNegativePressed != null
-                          ? () {
-                              Navigator.of(context).pop();
-                              onNegativePressed!();
-                            }
-                          : () => Navigator.of(context).pop(),
+                      onPressed:
+                          onNegativePressed != null
+                              ? () {
+                                Navigator.of(context).pop();
+                                onNegativePressed!();
+                              }
+                              : () => Navigator.of(context).pop(),
                       child: Text(negativeButtonText ?? 'Cancel'),
                     ),
                   if (showPositiveButton)
                     TextButton(
-                      onPressed: onPositivePressed != null
-                          ? () {
-                              Navigator.of(context).pop();
-                              onPositivePressed!();
-                            }
-                          : () => Navigator.of(context).pop(),
+                      onPressed:
+                          onPositivePressed != null
+                              ? () {
+                                Navigator.of(context).pop();
+                                onPositivePressed!();
+                              }
+                              : () => Navigator.of(context).pop(),
                       child: Text(positiveButtonText ?? 'OK'),
                     ),
                 ],

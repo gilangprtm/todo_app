@@ -71,7 +71,7 @@ class TaskItemWidget extends StatelessWidget {
                     child: Theme(
                       data: ThemeData(
                         checkboxTheme: CheckboxThemeData(
-                          fillColor: MaterialStateProperty.resolveWith(
+                          fillColor: WidgetStateProperty.resolveWith(
                             (states) => currentCheckboxColor,
                           ),
                         ),
@@ -173,7 +173,7 @@ class TaskItemWidget extends StatelessWidget {
                           child: Theme(
                             data: ThemeData(
                               checkboxTheme: CheckboxThemeData(
-                                fillColor: MaterialStateProperty.resolveWith(
+                                fillColor: WidgetStateProperty.resolveWith(
                                   (states) =>
                                       subtask.isCompleted
                                           ? (isDark
@@ -212,7 +212,7 @@ class TaskItemWidget extends StatelessWidget {
                       ],
                     ),
                   );
-                }).toList(),
+                }),
               ],
 
               // Show description if available

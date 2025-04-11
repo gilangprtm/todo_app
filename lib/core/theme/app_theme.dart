@@ -45,7 +45,6 @@ class AppTheme {
       secondary: AppColors.textSecondaryColor,
       secondaryContainer: AppColors.textTertiaryColor,
       surface: AppColors.backgroundColor,
-      background: AppColors.backgroundColor,
       error: AppColors.errorColor,
       onPrimary: Colors.white,
       onSecondary: Colors.white,
@@ -58,7 +57,7 @@ class AppTheme {
       color: AppColors.cardColor,
       shape: _cardShape,
       elevation: _elevation,
-      shadowColor: AppColors.black.withOpacity(0.05),
+      shadowColor: AppColors.black.withValues(alpha: 0.05),
     ),
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.backgroundColor,
@@ -67,7 +66,7 @@ class AppTheme {
         color: AppColors.textPrimaryColor,
       ),
       elevation: 0,
-      shadowColor: AppColors.black.withOpacity(0.05),
+      shadowColor: AppColors.black.withValues(alpha: 0.05),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: AppColors.backgroundColor,
@@ -131,7 +130,7 @@ class AppTheme {
           vertical: spacing8,
         ),
         elevation: 1,
-        shadowColor: AppColors.primaryColor.withOpacity(0.3),
+        shadowColor: AppColors.primaryColor.withValues(alpha: 0.3),
       ),
     ),
     textButtonTheme: TextButtonThemeData(
@@ -227,8 +226,8 @@ class AppTheme {
       ),
     ),
     checkboxTheme: CheckboxThemeData(
-      fillColor: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.selected)) {
+      fillColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
           return AppColors.primaryColor;
         }
         return AppColors.textSecondaryColor;
@@ -275,7 +274,6 @@ class AppTheme {
       secondary: AppColors.darkTextSecondaryColor,
       secondaryContainer: AppColors.textTertiaryColor,
       surface: AppColors.darkBackgroundColor,
-      background: AppColors.darkBackgroundColor,
       error: AppColors.errorColor,
       onPrimary: Colors.white,
       onSecondary: Colors.white,
@@ -288,7 +286,7 @@ class AppTheme {
       color: AppColors.darkCardColor,
       shape: _cardShape,
       elevation: _elevation,
-      shadowColor: AppColors.black.withOpacity(0.2),
+      shadowColor: AppColors.black.withValues(alpha: 0.2),
     ),
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.darkBackgroundColor,
@@ -297,7 +295,7 @@ class AppTheme {
         color: AppColors.darkTextPrimaryColor,
       ),
       elevation: 0,
-      shadowColor: AppColors.black.withOpacity(0.2),
+      shadowColor: AppColors.black.withValues(alpha: 0.2),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: AppColors.darkBackgroundColor,
@@ -361,7 +359,7 @@ class AppTheme {
           vertical: spacing8,
         ),
         elevation: 1,
-        shadowColor: AppColors.primaryColor.withOpacity(0.3),
+        shadowColor: AppColors.primaryColor.withValues(alpha: 0.3),
       ),
     ),
     textButtonTheme: TextButtonThemeData(
@@ -457,8 +455,8 @@ class AppTheme {
       ),
     ),
     checkboxTheme: CheckboxThemeData(
-      fillColor: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.selected)) {
+      fillColor: WidgetStateProperty.resolveWith((states) {
+        if (states.contains(WidgetState.selected)) {
           return AppColors.primaryColor;
         }
         return AppColors.darkTextSecondaryColor;

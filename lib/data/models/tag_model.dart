@@ -7,7 +7,7 @@ class TagModel {
   final DateTime createdAt;
 
   TagModel({this.id, required this.name, this.color, DateTime? createdAt})
-    : this.createdAt = createdAt ?? DateTime.now();
+    : createdAt = createdAt ?? DateTime.now();
 
   // Helper method to get color as a Flutter Color
   Color getColor() {

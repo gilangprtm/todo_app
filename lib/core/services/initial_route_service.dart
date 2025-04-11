@@ -3,7 +3,7 @@ import '../../../presentation/routes/app_routes.dart';
 
 /// Service to determine the initial route of the application based on data availability
 class InitialRouteService {
-  final LoggerService _logger = LoggerService.instance;
+  final LoggerService logger = LoggerService.instance;
 
   /// Singleton pattern
   static final InitialRouteService _instance = InitialRouteService._internal();

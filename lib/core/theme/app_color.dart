@@ -86,13 +86,13 @@ class AppColors {
 
   // Status Colors with Opacity
   static Color successColorWithOpacity(double opacity) =>
-      successColor.withOpacity(opacity);
+      successColor.withValues(alpha: opacity);
   static Color errorColorWithOpacity(double opacity) =>
-      errorColor.withOpacity(opacity);
+      errorColor.withValues(alpha: opacity);
   static Color warningColorWithOpacity(double opacity) =>
-      warningColor.withOpacity(opacity);
+      warningColor.withValues(alpha: opacity);
   static Color infoColorWithOpacity(double opacity) =>
-      infoColor.withOpacity(opacity);
+      infoColor.withValues(alpha: opacity);
 
   // Task Status Colors
   static Color getStatusColor(BuildContext context, int status) {
@@ -114,12 +114,12 @@ class AppColors {
     switch (status) {
       case 1: // In Progress
         return isDark
-            ? Colors.blue.withOpacity(0.15)
-            : Colors.blue.withOpacity(0.05);
+            ? Colors.blue.withValues(alpha: 0.15)
+            : Colors.blue.withValues(alpha: 0.05);
       case 2: // Completed
         return isDark
-            ? Colors.green.withOpacity(0.15)
-            : Colors.green.withOpacity(0.05);
+            ? Colors.green.withValues(alpha: 0.15)
+            : Colors.green.withValues(alpha: 0.05);
       default:
         return getCardColor(context);
     }
@@ -188,7 +188,7 @@ class AppColors {
     color: cardColor,
     boxShadow: [
       BoxShadow(
-        color: black.withOpacity(0.05),
+        color: black.withValues(alpha: 0.05),
         blurRadius: 8,
         offset: const Offset(0, 2),
       ),

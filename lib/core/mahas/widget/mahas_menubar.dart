@@ -3,16 +3,9 @@ import 'package:flutter/material.dart';
 import '../mahas_type.dart';
 import 'mahas_card.dart';
 
-enum TextVisibility {
-  hideAllText,
-  hideUnselectedText,
-  showAllText,
-}
+enum TextVisibility { hideAllText, hideUnselectedText, showAllText }
 
-enum CenterButtonPosition {
-  center,
-  aboveCenter,
-}
+enum CenterButtonPosition { center, aboveCenter }
 
 class MahasMenuBar extends StatefulWidget {
   final List<MenuItem> items;
@@ -27,6 +20,7 @@ class MahasMenuBar extends StatefulWidget {
   final bool showCenterButton;
   final bool isResponsive;
   final Widget? centerButton;
+  final double bottomPadding;
   final CenterButtonPosition centerButtonPosition;
 
   const MahasMenuBar({
@@ -44,6 +38,7 @@ class MahasMenuBar extends StatefulWidget {
     this.isResponsive = false,
     this.centerButton,
     this.centerButtonPosition = CenterButtonPosition.center,
+    this.bottomPadding = 0,
   });
 
   @override
@@ -90,22 +85,14 @@ class MahasMenuBarState extends State<MahasMenuBar> {
   @override
   Widget build(BuildContext context) {
     if (!widget.isResponsive) {
-      return Scaffold(
-        body: mobile(context),
-      );
+      return Scaffold(body: mobile(context));
     } else {
       if (isDesktop(context)) {
-        return Scaffold(
-          body: desktop(context),
-        );
+        return Scaffold(body: desktop(context));
       } else if (isTablet(context)) {
-        return Scaffold(
-          body: tablet(context),
-        );
+        return Scaffold(body: tablet(context));
       } else {
-        return Scaffold(
-          body: mobile(context),
-        );
+        return Scaffold(body: mobile(context));
       }
     }
   }
@@ -140,6 +127,10 @@ class MahasMenuBarState extends State<MahasMenuBar> {
                 children: _buildMenuItems(),
               ),
             ),
+            Container(
+              height: widget.bottomPadding,
+              color: widget.backgroundColor,
+            ),
           ],
         ),
         if (widget.showCenterButton &&
@@ -147,11 +138,10 @@ class MahasMenuBarState extends State<MahasMenuBar> {
             widget.centerButtonPosition == CenterButtonPosition.aboveCenter)
           Positioned(
             bottom: 30.0,
-            left: MediaQuery.of(context).size.width / 2 -
+            left:
+                MediaQuery.of(context).size.width / 2 -
                 28.0, // Center the button
-            child: Center(
-              child: widget.centerButton!,
-            ),
+            child: Center(child: widget.centerButton!),
           ),
       ],
     );
@@ -187,11 +177,10 @@ class MahasMenuBarState extends State<MahasMenuBar> {
             widget.centerButtonPosition == CenterButtonPosition.aboveCenter)
           Positioned(
             bottom: 30.0,
-            left: MediaQuery.of(context).size.width / 2 -
+            left:
+                MediaQuery.of(context).size.width / 2 -
                 28.0, // Center the button
-            child: Center(
-              child: widget.centerButton!,
-            ),
+            child: Center(child: widget.centerButton!),
           ),
       ],
     );
@@ -227,29 +216,29 @@ class MahasMenuBarState extends State<MahasMenuBar> {
             widget.centerButtonPosition == CenterButtonPosition.aboveCenter)
           Positioned(
             bottom: 30.0,
-            left: MediaQuery.of(context).size.width / 2 -
+            left:
+                MediaQuery.of(context).size.width / 2 -
                 28.0, // Center the button
-            child: Center(
-              child: widget.centerButton!,
-            ),
+            child: Center(child: widget.centerButton!),
           ),
       ],
     );
   }
 
   List<Widget> _buildMenuItems() {
-    List<Widget> menuItems = widget.items.asMap().entries.map((entry) {
-      int idx = entry.key;
-      MenuItem item = entry.value;
-      bool isSelected = _selectedIndex == idx;
+    List<Widget> menuItems =
+        widget.items.asMap().entries.map((entry) {
+          int idx = entry.key;
+          MenuItem item = entry.value;
+          bool isSelected = _selectedIndex == idx;
 
-      return Expanded(
-        child: GestureDetector(
-          onTap: () => _onItemTapped(idx),
-          child: _buildMenuItem(item, isSelected),
-        ),
-      );
-    }).toList();
+          return Expanded(
+            child: GestureDetector(
+              onTap: () => _onItemTapped(idx),
+              child: _buildMenuItem(item, isSelected),
+            ),
+          );
+        }).toList();
 
     if (widget.showCenterButton && widget.centerButton != null) {
       List<Widget> updatedMenuItems = [];
@@ -294,18 +283,20 @@ class MahasMenuBarState extends State<MahasMenuBar> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(item.icon,
-                  color: isSelected
-                      ? widget.selectedColor
-                      : widget.unselectedColor,
-                  size: isSelected ? 28.0 : 24.0),
+              Icon(
+                item.icon,
+                color:
+                    isSelected ? widget.selectedColor : widget.unselectedColor,
+                size: isSelected ? 28.0 : 24.0,
+              ),
               if (showText)
                 Text(
                   item.title,
                   style: TextStyle(
-                    color: isSelected
-                        ? widget.selectedColor
-                        : widget.unselectedColor,
+                    color:
+                        isSelected
+                            ? widget.selectedColor
+                            : widget.unselectedColor,
                     fontSize: 12.0,
                   ),
                 ),
@@ -320,18 +311,20 @@ class MahasMenuBarState extends State<MahasMenuBar> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(item.icon,
-                  color: isSelected
-                      ? widget.selectedColor
-                      : widget.unselectedColor,
-                  size: isSelected ? 28.0 : 24.0),
+              Icon(
+                item.icon,
+                color:
+                    isSelected ? widget.selectedColor : widget.unselectedColor,
+                size: isSelected ? 28.0 : 24.0,
+              ),
               if (showText)
                 Text(
                   item.title,
                   style: TextStyle(
-                    color: isSelected
-                        ? widget.selectedColor
-                        : widget.unselectedColor,
+                    color:
+                        isSelected
+                            ? widget.selectedColor
+                            : widget.unselectedColor,
                     fontSize: 12.0,
                   ),
                 ),
@@ -356,24 +349,29 @@ class MahasMenuBarState extends State<MahasMenuBar> {
               Container(
                 width: 50,
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? widget.selectedColor!.withValues(alpha: 0.1)
-                      : Colors.transparent,
+                  color:
+                      isSelected
+                          ? widget.selectedColor!.withValues(alpha: 0.1)
+                          : Colors.transparent,
                   borderRadius: BorderRadius.circular(16.0),
                 ),
-                child: Icon(item.icon,
-                    color: isSelected
-                        ? widget.selectedColor
-                        : widget.unselectedColor,
-                    size: isSelected ? 28.0 : 24.0),
+                child: Icon(
+                  item.icon,
+                  color:
+                      isSelected
+                          ? widget.selectedColor
+                          : widget.unselectedColor,
+                  size: isSelected ? 28.0 : 24.0,
+                ),
               ),
               if (showText)
                 Text(
                   item.title,
                   style: TextStyle(
-                    color: isSelected
-                        ? widget.selectedColor
-                        : widget.unselectedColor,
+                    color:
+                        isSelected
+                            ? widget.selectedColor
+                            : widget.unselectedColor,
                     fontSize: 12.0,
                   ),
                 ),
@@ -385,9 +383,11 @@ class MahasMenuBarState extends State<MahasMenuBar> {
           duration: const Duration(milliseconds: 300),
           padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
           margin: const EdgeInsets.symmetric(horizontal: 4.0),
-          child: Icon(item.icon,
-              color: isSelected ? widget.selectedColor : widget.unselectedColor,
-              size: isSelected ? 28.0 : 24.0),
+          child: Icon(
+            item.icon,
+            color: isSelected ? widget.selectedColor : widget.unselectedColor,
+            size: isSelected ? 28.0 : 24.0,
+          ),
         );
     }
   }

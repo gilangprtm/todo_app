@@ -32,23 +32,23 @@ class TaskHeaderWidget extends StatelessWidget {
             Text(
               today,
               style: AppTypography.bodyText1.copyWith(
-                color: AppColors.notionBlack.withOpacity(0.6),
+                color: AppColors.getTextPrimaryColor(context),
               ),
             ),
             const SizedBox(height: 4),
             Text(
               greeting,
               style: AppTypography.headline5.copyWith(
-                color: AppColors.notionBlack,
+                color: AppColors.getTextPrimaryColor(context),
                 fontWeight: FontWeight.bold,
               ),
             ),
           ],
         ),
-        CircleAvatar(
+        const CircleAvatar(
           radius: 20,
           backgroundColor: AppColors.notionBlack,
-          child: const Icon(Icons.person, color: Colors.white),
+          child: Icon(Icons.person, color: Colors.white),
         ),
       ],
     );

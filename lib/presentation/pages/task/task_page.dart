@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/theme/app_color.dart';
 import '../../providers/task/task_provider.dart';
 import 'widgets/task_header_widget.dart';
 import 'widgets/task_progress_widget.dart';

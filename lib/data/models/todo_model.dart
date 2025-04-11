@@ -24,8 +24,8 @@ class TodoModel {
     DateTime? updatedAt,
     this.subtasks = const [],
     this.tags = const [],
-  }) : this.createdAt = createdAt ?? DateTime.now(),
-       this.updatedAt = updatedAt ?? DateTime.now();
+  }) : createdAt = createdAt ?? DateTime.now(),
+       updatedAt = updatedAt ?? DateTime.now();
 
   Map<String, dynamic> toMap() {
     return {

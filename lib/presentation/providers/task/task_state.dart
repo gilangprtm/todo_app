@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
 import '../../../core/base/base_state_notifier.dart';
 import '../../../data/models/todo_model.dart';
-import '../../../data/models/tag_model.dart';
 
 class TaskState extends BaseState {
   final List<TodoModel> todos;
