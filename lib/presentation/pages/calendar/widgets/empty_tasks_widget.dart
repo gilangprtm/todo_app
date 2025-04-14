@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 class EmptyTasksWidget extends StatelessWidget {
   final ScrollController scrollController;
 
-  const EmptyTasksWidget({Key? key, required this.scrollController})
-    : super(key: key);
+  const EmptyTasksWidget({super.key, required this.scrollController});
 
   @override
   Widget build(BuildContext context) {

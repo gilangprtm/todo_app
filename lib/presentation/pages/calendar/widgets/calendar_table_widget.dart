@@ -70,7 +70,7 @@ class CalendarTableWidget extends ConsumerWidget {
               width: 12,
               height: 12,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.7),
+                color: Colors.white.withValues(alpha: 0.7),
                 shape: BoxShape.circle,
               ),
               child: const Center(

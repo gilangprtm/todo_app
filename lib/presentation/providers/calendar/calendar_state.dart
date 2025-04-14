@@ -33,21 +33,6 @@ class CalendarState extends BaseState {
        calendarFormat = calendarFormat ?? CalendarFormat.month;
 
   @override
-  List<Object?> get props => [
-    isLoading,
-    error,
-    stackTrace,
-    selectedDay,
-    focusedDay,
-    currentMonth,
-    eventMarkers,
-    calendarTasks,
-    isLoadingTasks,
-    isInitialized,
-    calendarFormat,
-  ];
-
-  @override
   CalendarState copyWith({
     bool? isLoading,
     dynamic error,
@@ -92,7 +77,6 @@ class CalendarState extends BaseState {
 
   // Get tasks for selected day
   List<TodoModel> getTasksForSelectedDay(DateTime date) {
-    final dateOnly = DateTime(date.year, date.month, date.day);
     return calendarTasks.where((task) {
       if (task.dueDate == null) return false;
       final taskDate = task.dueDate!;
