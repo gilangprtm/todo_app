@@ -1,21 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/theme/app_color.dart';
-import '../../../core/theme/app_typografi.dart';
+import './widgets/calendar_header_widget.dart';
+import './widgets/calendar_table_widget.dart';
+import './widgets/task_list_header_widget.dart';
+import './widgets/tasks_list_widget.dart';
 
-class CalendarPage extends ConsumerWidget {
+class CalendarPage extends StatelessWidget {
   const CalendarPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
+  Widget build(BuildContext context) {
+    return const Scaffold(
       body: SafeArea(
-        child: Center(
-          child: Text(
-            'Calendar Page',
-            style: AppTypography.headline4.copyWith(
-              color: AppColors.notionBlack,
-            ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Calendar header
+              CalendarHeaderWidget(),
+
+              // Calendar widget
+              CalendarTableWidget(),
+
+              SizedBox(height: 24),
+
+              // Task list header
+              TaskListHeaderWidget(),
+
+              // Task list
+              TasksListWidget(),
+            ],
           ),
         ),
       ),

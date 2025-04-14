@@ -9,6 +9,19 @@ class TodoService extends BaseService {
 
   TodoService(this._repository);
 
+  // Get all todos (for calendar view)
+  Future<List<TodoModel>> getAllTasks() async {
+    return await performanceAsync(
+      operationName: 'get_all_tasks',
+      function: () async {
+        final todoMaps = await _repository.fetchAllTodos();
+        final todos = todoMaps.map((map) => TodoModel.fromMap(map)).toList();
+        return await _enrichTodosWithRelations(todos);
+      },
+      tag: 'TodoService',
+    );
+  }
+
   // Get todos for today
   Future<List<TodoModel>> getTodosForToday() async {
     return await performanceAsync(
@@ -123,5 +136,24 @@ class TodoService extends BaseService {
     }
 
     return enrichedTodos;
+  }
+
+  // Get todos for specific date range (for calendar optimization)
+  Future<List<TodoModel>> getTasksForDateRange(
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
+    return await performanceAsync(
+      operationName: 'get_tasks_for_date_range',
+      function: () async {
+        final todoMaps = await _repository.fetchTodosForDateRange(
+          startDate,
+          endDate,
+        );
+        final todos = todoMaps.map((map) => TodoModel.fromMap(map)).toList();
+        return await _enrichTodosWithRelations(todos);
+      },
+      tag: 'TodoService',
+    );
   }
 }

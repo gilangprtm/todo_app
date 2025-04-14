@@ -6,6 +6,22 @@ class TodoRepository extends BaseRepository {
 
   TodoRepository(this._db);
 
+  // Fetch all todos for calendar view
+  Future<List<Map<String, dynamic>>> fetchAllTodos() async {
+    try {
+      // Get all tasks regardless of date or status using queryAll
+      return await _db.queryAll(DBLocal.tableTodo);
+    } catch (e, stackTrace) {
+      logError(
+        'Error fetching all todos',
+        error: e,
+        stackTrace: stackTrace,
+        tag: 'TodoRepository',
+      );
+      rethrow;
+    }
+  }
+
   // Fetch todos for today
   Future<List<Map<String, dynamic>>> fetchTodosForToday() async {
     try {
@@ -173,6 +189,30 @@ class TodoRepository extends BaseRepository {
     } catch (e, stackTrace) {
       logError(
         'Error updating subtask status for subtask $subtaskId',
+        error: e,
+        stackTrace: stackTrace,
+        tag: 'TodoRepository',
+      );
+      rethrow;
+    }
+  }
+
+  // Fetch todos for a specific date range
+  Future<List<Map<String, dynamic>>> fetchTodosForDateRange(
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
+    try {
+      final startDateIso = startDate.toIso8601String();
+      final endDateIso = endDate.toIso8601String();
+
+      String whereClause = 'due_date >= ? AND due_date <= ?';
+      List<dynamic> whereArgs = [startDateIso, endDateIso];
+
+      return await _db.queryWhere(DBLocal.tableTodo, whereClause, whereArgs);
+    } catch (e, stackTrace) {
+      logError(
+        'Error fetching todos for date range: ${startDate.toString()} to ${endDate.toString()}',
         error: e,
         stackTrace: stackTrace,
         tag: 'TodoRepository',

@@ -56,6 +56,7 @@ dependencies:
   font_awesome_flutter: ^10.8.0
   modal_bottom_sheet: ^3.0.0
   flutter_easyloading: ^3.0.5
+  table_calendar: ^3.0.9
 
   # Documents & Files
   flutter_pdfview: ^1.4.0

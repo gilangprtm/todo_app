@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_color.dart';
 import '../../../providers/task/task_provider.dart';
+import '../../../widgets/task_item_widget.dart';
 import 'task_list_header_widget.dart';
 import 'task_empty_widget.dart';
 import 'task_loading_error_widget.dart';
-import 'task_item_widget.dart';
 
 class TodayTasksTab extends ConsumerWidget {
   const TodayTasksTab({super.key});
@@ -65,6 +65,13 @@ class TodayTasksTab extends ConsumerWidget {
                                   .read(taskProvider.notifier)
                                   .toggleTodoStatus(todo);
                             },
+                            onToggleSubtask: (subtask) {
+                              ref
+                                  .read(taskProvider.notifier)
+                                  .toggleSubtaskStatus(subtask);
+                            },
+                            showSubtasks: true,
+                            simplifiedView: false,
                           );
                         },
                       ),
@@ -125,6 +132,13 @@ class TodayTasksTab extends ConsumerWidget {
                                   .read(taskProvider.notifier)
                                   .toggleTodoStatus(todo);
                             },
+                            onToggleSubtask: (subtask) {
+                              ref
+                                  .read(taskProvider.notifier)
+                                  .toggleSubtaskStatus(subtask);
+                            },
+                            showSubtasks: true,
+                            simplifiedView: false,
                           );
                         },
                       ),
