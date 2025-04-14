@@ -169,31 +169,63 @@ class TaskNotifier extends BaseStateNotifier<TaskState> {
       );
 
       // Update local state without reloading all todos
-      final todoIndex = state.todos.indexWhere((t) => t.id == subtask.todoId);
+      List<TodoModel> updatedTodos = List<TodoModel>.from(state.todos);
+      List<TodoModel> updatedPreviousTodos = List<TodoModel>.from(
+        state.previousTodos,
+      );
+
+      // Check if subtask is in today's todos
+      final todoIndex = updatedTodos.indexWhere(
+        (t) =>
+            t.id == subtask.todoId && t.subtasks.any((s) => s.id == subtask.id),
+      );
+
+      // Check if subtask is in previous todos
+      final previousTodoIndex = updatedPreviousTodos.indexWhere(
+        (t) =>
+            t.id == subtask.todoId && t.subtasks.any((s) => s.id == subtask.id),
+      );
+
+      // Update subtask in today's todos if found
       if (todoIndex != -1) {
-        final updatedTodos = List<TodoModel>.from(state.todos);
         final todo = updatedTodos[todoIndex];
 
-        // Find and update the subtask
-        final subtasks = List<SubtaskModel>.from(todo.subtasks);
-        final subtaskIndex = subtasks.indexWhere((s) => s.id == subtask.id);
+        // Create new subtasks list with updated subtask
+        final updatedSubtasks =
+            todo.subtasks.map((s) {
+              return s.id == subtask.id ? updatedSubtask : s;
+            }).toList();
 
-        if (subtaskIndex != -1) {
-          subtasks[subtaskIndex] = updatedSubtask;
-
-          // Update the todo with updated subtasks
-          updatedTodos[todoIndex] = todo.copyWith(subtasks: subtasks);
-
-          // Calculate the new completed count
-          final completedCount =
-              updatedTodos.where((todo) => todo.status == 2).length;
-
-          state = state.copyWith(
-            todos: updatedTodos,
-            completedCount: completedCount,
-          );
-        }
+        // Replace todo with updated version
+        updatedTodos[todoIndex] = todo.copyWith(subtasks: updatedSubtasks);
       }
+
+      // Update subtask in previous todos if found
+      if (previousTodoIndex != -1) {
+        final todo = updatedPreviousTodos[previousTodoIndex];
+
+        // Create new subtasks list with updated subtask
+        final updatedSubtasks =
+            todo.subtasks.map((s) {
+              return s.id == subtask.id ? updatedSubtask : s;
+            }).toList();
+
+        // Replace todo with updated version
+        updatedPreviousTodos[previousTodoIndex] = todo.copyWith(
+          subtasks: updatedSubtasks,
+        );
+      }
+
+      // Calculate the new completed count (for today's tasks only)
+      final completedCount =
+          updatedTodos.where((todo) => todo.status == 2).length;
+
+      // Update state with both updated lists
+      state = state.copyWith(
+        todos: updatedTodos,
+        previousTodos: updatedPreviousTodos,
+        completedCount: completedCount,
+      );
     });
   }
 

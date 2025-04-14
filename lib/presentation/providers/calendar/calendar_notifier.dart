@@ -293,22 +293,25 @@ class CalendarNotifier extends BaseStateNotifier<CalendarState> {
         final newIsCompleted = !subtask.isCompleted;
 
         // Update via service
-        await _todoService.updateSubtaskStatus(subtask, newIsCompleted);
+        final updatedSubtask = await _todoService.updateSubtaskStatus(
+          subtask,
+          newIsCompleted,
+        );
 
         // Update local state
         final updatedTasks =
             state.calendarTasks.map((task) {
               if (task.subtasks.any((s) => s.id == subtask.id)) {
-                // Buat salinan subtasks dengan status yang diperbarui
+                // Update subtasks list with updated subtask
                 final updatedSubtasks =
                     task.subtasks.map((s) {
                       if (s.id == subtask.id) {
-                        return s.copyWith(isCompleted: newIsCompleted);
+                        return updatedSubtask;
                       }
                       return s;
                     }).toList();
 
-                // Return task dengan subtasks yang diperbarui
+                // Return task with updated subtasks
                 return task.copyWith(subtasks: updatedSubtasks);
               }
               return task;
@@ -316,26 +319,22 @@ class CalendarNotifier extends BaseStateNotifier<CalendarState> {
 
         // Update event markers
         final updatedMarkers = <DateTime, List<TodoModel>>{};
-        for (final entry in state.eventMarkers.entries) {
-          final updatedMarkerTasks =
-              entry.value.map((task) {
-                if (task.subtasks.any((s) => s.id == subtask.id)) {
-                  // Buat salinan subtasks dengan status yang diperbarui
-                  final updatedSubtasks =
-                      task.subtasks.map((s) {
-                        if (s.id == subtask.id) {
-                          return s.copyWith(isCompleted: newIsCompleted);
-                        }
-                        return s;
-                      }).toList();
 
-                  // Return task dengan subtasks yang diperbarui
-                  return task.copyWith(subtasks: updatedSubtasks);
-                }
-                return task;
-              }).toList();
+        // Rebuild markers
+        for (final task in updatedTasks) {
+          if (task.dueDate != null) {
+            final dateOnly = DateTime(
+              task.dueDate!.year,
+              task.dueDate!.month,
+              task.dueDate!.day,
+            );
 
-          updatedMarkers[entry.key] = updatedMarkerTasks;
+            if (updatedMarkers[dateOnly] == null) {
+              updatedMarkers[dateOnly] = [task];
+            } else {
+              updatedMarkers[dateOnly]!.add(task);
+            }
+          }
         }
 
         // Update state

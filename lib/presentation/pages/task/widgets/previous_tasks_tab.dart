@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_color.dart';
 import '../../../providers/task/task_provider.dart';
-import 'task_item_widget.dart';
+import '../../../widgets/task_item_widget.dart';
 
 class PreviousTasksTab extends ConsumerWidget {
   const PreviousTasksTab({super.key});
@@ -87,6 +87,13 @@ class PreviousTasksTab extends ConsumerWidget {
                       onToggleStatus: () {
                         ref.read(taskProvider.notifier).toggleTodoStatus(todo);
                       },
+                      onToggleSubtask: (subtask) {
+                        ref
+                            .read(taskProvider.notifier)
+                            .toggleSubtaskStatus(subtask);
+                      },
+                      showSubtasks: true,
+                      simplifiedView: false,
                     );
                   },
                 );
