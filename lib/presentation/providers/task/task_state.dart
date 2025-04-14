@@ -8,6 +8,7 @@ class TaskState extends BaseState {
   final bool filterByToday;
   final DateTime selectedDate;
   final bool isLoadingPrevious;
+  final bool isRefreshing;
 
   TaskState({
     super.isLoading = false,
@@ -19,12 +20,13 @@ class TaskState extends BaseState {
     this.filterByToday = true,
     DateTime? selectedDate,
     this.isLoadingPrevious = false,
+    this.isRefreshing = false,
   }) : selectedDate = selectedDate ?? DateTime.now();
 
   @override
   TaskState copyWith({
     bool? isLoading,
-    Object? error,
+    dynamic error,
     StackTrace? stackTrace,
     bool clearError = false,
     List<TodoModel>? todos,
@@ -33,6 +35,7 @@ class TaskState extends BaseState {
     bool? filterByToday,
     DateTime? selectedDate,
     bool? isLoadingPrevious,
+    bool? isRefreshing,
   }) {
     return TaskState(
       isLoading: isLoading ?? this.isLoading,
@@ -44,6 +47,7 @@ class TaskState extends BaseState {
       filterByToday: filterByToday ?? this.filterByToday,
       selectedDate: selectedDate ?? this.selectedDate,
       isLoadingPrevious: isLoadingPrevious ?? this.isLoadingPrevious,
+      isRefreshing: isRefreshing ?? this.isRefreshing,
     );
   }
 

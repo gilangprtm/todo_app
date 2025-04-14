@@ -52,13 +52,83 @@ class CalendarNotifier extends BaseStateNotifier<CalendarState> {
     super.onClose();
   }
 
-  // Fetch tasks for current month
+  // Fetch tasks untuk inisialisasi
   Future<void> fetchTasks() async {
-    final now = DateTime.now();
-    // Atur tanggal hari ini sebagai selected dan focused day
-    setSelectedDay(now);
-    // Muat data untuk bulan ini
-    await loadTasksForMonth(now.year, now.month);
+    await runAsync('fetchTasks', () async {
+      try {
+        // Get current month for initial load
+        final now = DateTime.now();
+        final year = now.year;
+        final month = now.month;
+
+        // Load tasks for current month
+        await loadTasksForMonth(year, month);
+
+        // Mark as initialized
+        state = state.copyWith(isInitialized: true, clearError: true);
+      } catch (e, stackTrace) {
+        state = state.copyWith(error: e, stackTrace: stackTrace);
+      }
+    });
+  }
+
+  // Silent refresh - tidak mengubah UI loading state
+  Future<void> silentRefresh() async {
+    // Jika sedang refresh, loading, atau tasks sedang loading, abaikan
+    if (state.isRefreshing || state.isLoading || state.isLoadingTasks) return;
+
+    // Set refresh state tapi tidak mempengaruhi isLoading
+    state = state.copyWith(isRefreshing: true);
+
+    await runAsync('silentRefresh', () async {
+      try {
+        // Get current focused month
+        final year = state.focusedDay.year;
+        final month = state.focusedDay.month;
+
+        // Hitung tanggal awal dan akhir bulan
+        final startOfMonth = DateTime(year, month, 1);
+        final endOfMonth =
+            month < 12
+                ? DateTime(year, month + 1, 0)
+                : DateTime(year + 1, 1, 0);
+
+        final monthTasks = await _todoService.getTasksForDateRange(
+          startOfMonth,
+          endOfMonth,
+        );
+
+        // Buat map untuk event markers
+        final eventMarkers = <DateTime, List<TodoModel>>{};
+        for (final task in monthTasks) {
+          if (task.dueDate != null) {
+            final dateOnly = DateTime(
+              task.dueDate!.year,
+              task.dueDate!.month,
+              task.dueDate!.day,
+            );
+
+            if (eventMarkers[dateOnly] == null) {
+              eventMarkers[dateOnly] = [task];
+            } else {
+              eventMarkers[dateOnly]!.add(task);
+            }
+          }
+        }
+
+        // Update state tanpa mengubah loading states
+        state = state.copyWith(
+          calendarTasks: monthTasks,
+          eventMarkers: eventMarkers,
+          isRefreshing: false,
+          isInitialized: true,
+          clearError: true,
+        );
+      } catch (e) {
+        // Silent error handling
+        state = state.copyWith(isRefreshing: false);
+      }
+    });
   }
 
   // Load tasks untuk bulan tertentu - HANYA mengurus pengambilan data task
@@ -133,16 +203,29 @@ class CalendarNotifier extends BaseStateNotifier<CalendarState> {
 
   // Handle page change dari calendar
   void handleCalendarPageChanged(DateTime page) {
-    // Hanya update UI state dulu, jangan lakukan operasi database apapun
+    // Extract the year and month from the page
+    final int year = page.year;
+    final int month = page.month;
+
+    // Create a new focusedDay that maintains the same day as the selectedDay if possible,
+    // or uses the day from the page parameter if no selectedDay exists
+    final int day = state.selectedDay?.day ?? page.day;
+
+    // Make sure we don't create an invalid date (e.g., February 30)
+    final int lastDayOfMonth = DateTime(year, month + 1, 0).day;
+    final int actualDay = day > lastDayOfMonth ? lastDayOfMonth : day;
+    final DateTime newFocusedDay = DateTime(year, month, actualDay);
+
+    // Update the state with the new focusedDay and currentMonth
     state = state.copyWith(
-      focusedDay: page,
-      currentMonth: '${page.year}-${page.month}',
+      focusedDay: newFocusedDay,
+      currentMonth: '$year-$month',
     );
 
     // Tunggu animasi selesai, baru muat data - delay 700ms
     Timer(const Duration(milliseconds: 700), () {
       if (!mounted) return;
-      loadTasksForMonth(page.year, page.month);
+      loadTasksForMonth(year, month);
     });
   }
 

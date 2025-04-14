@@ -12,6 +12,7 @@ class CalendarState extends BaseState {
   final bool isLoadingTasks;
   final bool isInitialized;
   final CalendarFormat calendarFormat;
+  final bool isRefreshing; // Flag untuk silent refresh
 
   CalendarState({
     super.isLoading = true,
@@ -25,6 +26,7 @@ class CalendarState extends BaseState {
     this.isLoadingTasks = false,
     this.isInitialized = false,
     CalendarFormat? calendarFormat,
+    this.isRefreshing = false,
   }) : focusedDay = focusedDay ?? DateTime.now(),
        currentMonth =
            currentMonth ?? '${DateTime.now().year}-${DateTime.now().month}',
@@ -46,6 +48,7 @@ class CalendarState extends BaseState {
     bool? isLoadingTasks,
     bool? isInitialized,
     CalendarFormat? calendarFormat,
+    bool? isRefreshing,
   }) {
     return CalendarState(
       isLoading: isLoading ?? this.isLoading,
@@ -59,6 +62,7 @@ class CalendarState extends BaseState {
       isLoadingTasks: isLoadingTasks ?? this.isLoadingTasks,
       isInitialized: isInitialized ?? this.isInitialized,
       calendarFormat: calendarFormat ?? this.calendarFormat,
+      isRefreshing: isRefreshing ?? this.isRefreshing,
     );
   }
 

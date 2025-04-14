@@ -11,7 +11,7 @@ void main() async {
   // Inisialisasi semua service melalui MahasService
   await MahasService.init();
 
-  // Periksa apakah data Pokemon sudah ada
+  // Periksa apakah data sudah ada
   final String initialRoute = await MahasService.determineInitialRoute();
 
   runApp(ProviderScope(child: MyApp(initialRoute: initialRoute)));
@@ -24,14 +24,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Tambahkan log viewer hanya dalam mode development
-    final appRoutes = AppRoutesProvider.getRoutes();
-
     return MaterialApp(
-      title: 'Fokedex',
+      title: 'Todo App',
       debugShowCheckedModeBanner: false,
       initialRoute: initialRoute,
-      routes: appRoutes,
+      routes: AppRoutesProvider.getRoutes(),
       navigatorKey: Mahas.navigatorKey,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,

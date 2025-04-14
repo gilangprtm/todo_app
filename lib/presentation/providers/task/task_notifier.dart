@@ -11,8 +11,7 @@ class TaskNotifier extends BaseStateNotifier<TaskState> {
 
   @override
   Future<void> onInit() async {
-    await loadTodos();
-    await loadPreviousTodos();
+    await fetchTasks();
   }
 
   // Load todos from the database
@@ -194,6 +193,63 @@ class TaskNotifier extends BaseStateNotifier<TaskState> {
             completedCount: completedCount,
           );
         }
+      }
+    });
+  }
+
+  // Fetch Data
+  Future<void> fetchTasks() async {
+    state = state.copyWith(isLoading: true);
+
+    await runAsync('fetchTasks', () async {
+      try {
+        // Get tasks for today
+        final todayTodos = await _todoService.getTodosForToday();
+
+        // Get previous tasks
+        final previousTodos = await _todoService.getPreviousTodos();
+
+        // Update state
+        state = state.copyWith(
+          todos: todayTodos,
+          previousTodos: previousTodos,
+          isLoading: false,
+          clearError: true,
+        );
+      } catch (e, stackTrace) {
+        state = state.copyWith(
+          isLoading: false,
+          error: e,
+          stackTrace: stackTrace,
+        );
+      }
+    });
+  }
+
+  // Silent refresh - tidak mengubah UI loading state
+  Future<void> silentRefresh() async {
+    // Jika sedang refresh atau loading, abaikan
+    if (state.isRefreshing || state.isLoading) return;
+
+    // Set refresh state tapi tidak mempengaruhi isLoading
+    state = state.copyWith(isRefreshing: true);
+
+    await runAsync('silentRefresh', () async {
+      try {
+        // Ambil data terbaru di background
+        final todayTodos = await _todoService.getTodosForToday();
+        final previousTodos = await _todoService.getPreviousTodos();
+
+        // Update state tanpa merubah loading state
+        state = state.copyWith(
+          todos: todayTodos,
+          previousTodos: previousTodos,
+          isRefreshing: false,
+          clearError: true,
+        );
+      } catch (e) {
+        // Silent error handling - error tidak ditampilkan di UI
+        state = state.copyWith(isRefreshing: false);
       }
     });
   }
