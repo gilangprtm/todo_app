@@ -14,7 +14,9 @@ import 'add_task_state.dart';
 class AddTaskNotifier extends BaseStateNotifier<AddTaskState> {
   final TodoService _todoService;
   final InputTextController titleController = InputTextController();
-  final InputTextController descriptionController = InputTextController();
+  final InputTextController descriptionController = InputTextController(
+    type: InputTextType.paragraf,
+  );
   final InputDatetimeController dateController = InputDatetimeController();
   final InputDatetimeController timeController = InputDatetimeController();
   final InputDropdownController priorityController = InputDropdownController(
@@ -24,72 +26,31 @@ class AddTaskNotifier extends BaseStateNotifier<AddTaskState> {
       DropdownItem(text: 'High', value: 2),
     ],
   );
+  final InputTextController subtaskController = InputTextController();
 
   AddTaskNotifier(super.initialState, super.ref, this._todoService);
 
-  /// Set tanggal jatuh tempo tugas
-  Future<void> setDueDate(BuildContext context) async {
-    // Toggle date picker UI flag
-    state = state.copyWith(showDatePicker: true);
+  @override
+  Future<void> onInit() async {
+    super.onInit();
+    await loadTags();
+  }
 
-    // Show date picker
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: state.dueDate ?? DateTime.now(),
-      firstDate: DateTime.now().subtract(const Duration(days: 365)),
-      lastDate: DateTime.now().add(const Duration(days: 365 * 5)),
-    );
-
-    // Update state with picked date
-    if (pickedDate != null) {
-      state = state.copyWith(dueDate: pickedDate);
-
-      // If time isn't set yet, show time picker next
-      if (state.dueTime == null) {
-        setDueTime(context);
+  /// Load all available tags from database
+  Future<void> loadTags() async {
+    await runAsync('loadTags', () async {
+      try {
+        final tags = await _todoService.getAllTags();
+        state = state.copyWith(availableTags: tags);
+      } catch (e, stackTrace) {
+        logger.e('Error loading tags', error: e, stackTrace: stackTrace);
       }
-    }
-
-    // Hide date picker UI
-    state = state.copyWith(showDatePicker: false);
+    });
   }
 
-  /// Set waktu jatuh tempo tugas
-  Future<void> setDueTime(BuildContext context) async {
-    // Toggle time picker UI flag
-    state = state.copyWith(showTimePicker: true);
-
-    // Show time picker
-    final TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: state.dueTime ?? TimeOfDay.now(),
-    );
-
-    // Update state with picked time
-    if (pickedTime != null) {
-      state = state.copyWith(dueTime: pickedTime);
-    }
-
-    // Hide time picker UI
-    state = state.copyWith(showTimePicker: false);
-  }
-
-  /// Helper method untuk update state dari komponen datetime
-  void setState(BuildContext context, {DateTime? setDate, TimeOfDay? setTime}) {
-    if (setDate != null) {
-      state = state.copyWith(dueDate: setDate);
-    }
-
-    if (setTime != null) {
-      state = state.copyWith(dueTime: setTime);
-    }
-  }
-
-  /// Set prioritas tugas
-  void setPriority(int priority) {
-    if (priority >= 0 && priority <= 2) {
-      state = state.copyWith(priority: priority);
-    }
+  /// Toggle tag selection UI visibility
+  void toggleTagSelector() {
+    state = state.copyWith(showTagSelector: !state.showTagSelector);
   }
 
   /// Tambah subtask baru
@@ -108,6 +69,7 @@ class AddTaskNotifier extends BaseStateNotifier<AddTaskState> {
     final updatedSubtasks = List<SubtaskModel>.from(state.subtasks)
       ..add(newSubtask);
     state = state.copyWith(subtasks: updatedSubtasks);
+    subtaskController.clear();
   }
 
   /// Hapus subtask
@@ -132,15 +94,7 @@ class AddTaskNotifier extends BaseStateNotifier<AddTaskState> {
 
   /// Validasi form sebelum submit
   bool _validateForm() {
-    final title = titleController.value;
-
-    if (title.isEmpty) {
-      state = state.copyWith(
-        error: 'Judul tugas tidak boleh kosong',
-        clearError: false,
-      );
-      return false;
-    }
+    if (!titleController.isValid) return false;
 
     return true;
   }

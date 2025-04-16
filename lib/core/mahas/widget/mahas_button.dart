@@ -133,7 +133,12 @@ class MahasButton extends StatelessWidget {
     return IconButton(
       icon: child,
       onPressed: isDisabled ? null : onPressed,
-      color: buttonColor,
+      style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.all(buttonColor),
+        shape: WidgetStateProperty.all(
+          RoundedRectangleBorder(borderRadius: borderRadius),
+        ),
+      ),
       padding: const EdgeInsets.all(8.0),
       iconSize: 24.0,
     );

@@ -10,6 +10,7 @@ class AddTaskState extends BaseState {
   final int priority; // 0: low, 1: medium, 2: high
   final List<SubtaskModel> subtasks;
   final List<TagModel> selectedTags;
+  final List<TagModel> availableTags;
 
   // State untuk UI
   final bool isSubmitting;
@@ -30,6 +31,7 @@ class AddTaskState extends BaseState {
     this.priority = 0,
     this.subtasks = const [],
     this.selectedTags = const [],
+    this.availableTags = const [],
     this.isSubmitting = false,
     this.showDatePicker = false,
     this.showTimePicker = false,
@@ -51,6 +53,7 @@ class AddTaskState extends BaseState {
     int? priority,
     List<SubtaskModel>? subtasks,
     List<TagModel>? selectedTags,
+    List<TagModel>? availableTags,
     bool? isSubmitting,
     bool? showDatePicker,
     bool? showTimePicker,
@@ -68,6 +71,7 @@ class AddTaskState extends BaseState {
       priority: priority ?? this.priority,
       subtasks: subtasks ?? this.subtasks,
       selectedTags: selectedTags ?? this.selectedTags,
+      availableTags: availableTags ?? this.availableTags,
       isSubmitting: isSubmitting ?? this.isSubmitting,
       showDatePicker: showDatePicker ?? this.showDatePicker,
       showTimePicker: showTimePicker ?? this.showTimePicker,

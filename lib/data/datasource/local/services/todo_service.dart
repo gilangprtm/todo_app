@@ -167,7 +167,7 @@ class TodoService extends BaseService {
         final todoId = await _repository.insertTodo(todoMap);
 
         // Prepare todo with real ID
-        final newTodo = todo.copyWith(id: todoId);
+        todo.copyWith(id: todoId);
 
         // Add subtasks if any
         if (todo.subtasks.isNotEmpty) {
@@ -215,5 +215,17 @@ class TodoService extends BaseService {
 
     // Return complete todo
     return todo.copyWith(subtasks: subtasks, tags: tags);
+  }
+
+  // Get all available tags from the database
+  Future<List<TagModel>> getAllTags() async {
+    return await performanceAsync(
+      operationName: 'get_all_tags',
+      function: () async {
+        final tagMaps = await _repository.fetchAllTags();
+        return tagMaps.map((map) => TagModel.fromMap(map)).toList();
+      },
+      tag: 'TodoService',
+    );
   }
 }

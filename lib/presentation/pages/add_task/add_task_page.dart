@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/mahas/mahas_type.dart';
+import '../../../core/mahas/widget/mahas_button.dart';
 import '../../../core/theme/app_color.dart';
+import '../../../core/theme/app_typografi.dart';
 import '../../../core/mahas/inputs/input_text_component.dart';
 import '../../../core/mahas/inputs/input_datetime_component.dart';
 import '../../../core/mahas/inputs/input_dropdown_component.dart';
@@ -91,42 +94,255 @@ class AddTaskPage extends ConsumerWidget {
           InputDropdownComponent(
             controller: notifier.priorityController,
             label: 'Prioritas',
-            marginBottom: 15,
           ),
 
-          // Subtasks section will be implemented in future
-
-          // Submit button
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed:
-                  state.isSubmitting
-                      ? null
-                      : () => notifier.handleSubmit(context, homeNotifier),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryColor,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                disabledBackgroundColor: AppColors.grey,
+          // Subtasks section
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Subtasks'),
+              const SizedBox(height: 8),
+              // Subtask input
+              Row(
+                children: [
+                  Expanded(
+                    child: InputTextComponent(
+                      controller: notifier.subtaskController,
+                      marginBottom: 0,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  MahasButton(
+                    icon: Icon(
+                      Icons.add,
+                      color: AppColors.getCardColor(context),
+                    ),
+                    color: AppColors.getTextPrimaryColor(context),
+                    type: ButtonType.icon,
+                    onPressed: () {
+                      if (notifier.subtaskController.value.isNotEmpty) {
+                        notifier.addSubtask(notifier.subtaskController.value);
+                      }
+                    },
+                  ),
+                ],
               ),
-              child:
-                  state.isSubmitting
-                      ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2,
+              const SizedBox(height: 8),
+              // Subtask list
+              if (state.subtasks.isNotEmpty)
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey.shade300),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: state.subtasks.length,
+                    separatorBuilder:
+                        (context, index) => const Divider(height: 1),
+                    itemBuilder: (context, index) {
+                      final subtask = state.subtasks[index];
+                      return ListTile(
+                        dense: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 0,
                         ),
-                      )
-                      : const Text('Tambah Tugas'),
-            ),
+                        title: Text(
+                          subtask.title,
+                          style: AppTypography.todoSubtask,
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.close, size: 18),
+                          onPressed: () => notifier.removeSubtask(subtask),
+                          color: Colors.red,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+            ],
           ),
 
+          // Tag selection section
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Tags'),
+                  TextButton.icon(
+                    onPressed: () => notifier.toggleTagSelector(),
+                    icon: Icon(
+                      state.showTagSelector
+                          ? Icons.keyboard_arrow_up
+                          : Icons.keyboard_arrow_down,
+                      size: 18,
+                      color: AppColors.getTextPrimaryColor(context),
+                    ),
+                    label: Text(
+                      state.showTagSelector ? 'Hide' : 'Show',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppColors.getTextPrimaryColor(context),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              // Selected tags display
+              if (state.selectedTags.isNotEmpty) ...[
+                SizedBox(
+                  height: 36,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children:
+                          state.selectedTags
+                              .map(
+                                (tag) => Padding(
+                                  padding: const EdgeInsets.only(right: 8),
+                                  child: Chip(
+                                    label: Text(
+                                      tag.name,
+                                      style: AppTypography.todoTag.copyWith(
+                                        color: Colors.white,
+                                        fontSize: 13,
+                                      ),
+                                    ),
+                                    backgroundColor: tag.getColor(),
+                                    deleteIcon: const Icon(
+                                      Icons.close,
+                                      size: 16,
+                                      color: Colors.white,
+                                    ),
+                                    onDeleted: () => notifier.toggleTag(tag),
+                                    visualDensity: VisualDensity.compact,
+                                    materialTapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                    labelPadding: const EdgeInsets.symmetric(
+                                      horizontal: 4,
+                                      vertical: 0,
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 4,
+                                      vertical: 0,
+                                    ),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                    ),
+                  ),
+                ),
+              ],
+
+              // Tag selector
+              if (state.showTagSelector) ...[
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        height: 44,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 8,
+                          ),
+                          child: Row(
+                            children:
+                                state.availableTags
+                                    .map(
+                                      (tag) => Padding(
+                                        padding: const EdgeInsets.only(
+                                          right: 8,
+                                        ),
+                                        child: OutlinedButton(
+                                          onPressed:
+                                              () => notifier.toggleTag(tag),
+                                          style: OutlinedButton.styleFrom(
+                                            backgroundColor:
+                                                state.selectedTags.any(
+                                                      (t) => t.id == tag.id,
+                                                    )
+                                                    ? tag
+                                                        .getColor()
+                                                        .withOpacity(0.7)
+                                                    : Colors.transparent,
+                                            side: BorderSide(
+                                              color:
+                                                  state.selectedTags.any(
+                                                        (t) => t.id == tag.id,
+                                                      )
+                                                      ? Colors.transparent
+                                                      : Colors.grey.shade300,
+                                            ),
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 12,
+                                              vertical: 0,
+                                            ),
+                                            minimumSize: const Size(0, 28),
+                                          ),
+                                          child: Text(
+                                            tag.name,
+                                            style: TextStyle(
+                                              color:
+                                                  state.selectedTags.any(
+                                                        (t) => t.id == tag.id,
+                                                      )
+                                                      ? Colors.white
+                                                      : Colors.black87,
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                    .toList(),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    MahasButton(
+                      icon: Icon(
+                        Icons.add,
+                        color: AppColors.getCardColor(context),
+                      ),
+                      color: AppColors.getTextPrimaryColor(context),
+                      type: ButtonType.icon,
+                      onPressed: () {
+                        if (notifier.subtaskController.value.isNotEmpty) {
+                          notifier.addSubtask(notifier.subtaskController.value);
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ],
+              const SizedBox(height: 16),
+            ],
+          ),
+
+          MahasButton(
+            onPressed:
+                state.isSubmitting
+                    ? null
+                    : () => notifier.handleSubmit(context, homeNotifier),
+            isLoading: state.isSubmitting,
+            text: 'ADD',
+            color: AppColors.getTextPrimaryColor(context),
+            isFullWidth: true,
+          ),
           const SizedBox(height: 16),
         ],
       ),
