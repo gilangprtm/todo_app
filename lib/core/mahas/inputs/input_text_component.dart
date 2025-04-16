@@ -14,7 +14,7 @@ enum InputTextType {
   paragraf,
   money,
   timeHour,
-  timeMinutes
+  timeMinutes,
 }
 
 class InputTextController extends ChangeNotifier {
@@ -22,9 +22,7 @@ class InputTextController extends ChangeNotifier {
   final TextEditingController _con = TextEditingController();
   late Function(VoidCallback fn) setState;
 
-  InputTextController({
-    this.type = InputTextType.text,
-  });
+  InputTextController({this.type = InputTextType.text});
 
   bool _required = false;
   bool _showPassword = false;
@@ -91,6 +89,10 @@ class InputTextController extends ChangeNotifier {
     }
   }
 
+  void clear() {
+    _con.clear();
+  }
+
   @override
   void dispose() {
     _con.dispose();
@@ -153,43 +155,43 @@ class _InputTextState extends State<InputTextComponent> {
       hintText: widget.placeHolder,
       isDense: true,
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.all(widget.borderRadius ??
-            const Radius.circular(AppTheme.borderRadius)),
+        borderRadius: BorderRadius.all(
+          widget.borderRadius ?? const Radius.circular(AppTheme.borderRadius),
+        ),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.all(widget.borderRadius ??
-            const Radius.circular(AppTheme.borderRadius)),
+        borderRadius: BorderRadius.all(
+          widget.borderRadius ?? const Radius.circular(AppTheme.borderRadius),
+        ),
         borderSide: const BorderSide(color: AppColors.black, width: .1),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.all(widget.borderRadius ??
-            const Radius.circular(AppTheme.borderRadius)),
+        borderRadius: BorderRadius.all(
+          widget.borderRadius ?? const Radius.circular(AppTheme.borderRadius),
+        ),
         borderSide: const BorderSide(color: AppColors.black, width: .1),
       ),
       prefixText: widget.prefixText,
-      prefixStyle: TextStyle(
-        color: AppColors.black.withValues(alpha: 0.6),
-      ),
-      suffixIconConstraints: const BoxConstraints(
-        minHeight: 30,
-        minWidth: 30,
-      ),
-      suffixIcon: widget.controller.type == InputTextType.password
-          ? InkWell(
-              splashColor: Colors.transparent,
-              onTap: () => setState(() {
-                widget.controller._showPassword =
-                    !widget.controller._showPassword;
-              }),
-              child: Icon(
-                widget.controller._showPassword
-                    ? Icons.visibility_off
-                    : Icons.visibility,
-                color: AppColors.black.withValues(alpha: 0.6),
-                size: 14,
-              ),
-            )
-          : null,
+      prefixStyle: TextStyle(color: AppColors.black.withValues(alpha: 0.6)),
+      suffixIconConstraints: const BoxConstraints(minHeight: 30, minWidth: 30),
+      suffixIcon:
+          widget.controller.type == InputTextType.password
+              ? InkWell(
+                splashColor: Colors.transparent,
+                onTap:
+                    () => setState(() {
+                      widget.controller._showPassword =
+                          !widget.controller._showPassword;
+                    }),
+                child: Icon(
+                  widget.controller._showPassword
+                      ? Icons.visibility_off
+                      : Icons.visibility,
+                  color: AppColors.black.withValues(alpha: 0.6),
+                  size: 14,
+                ),
+              )
+              : null,
     );
 
     var textFormField = TextFormField(
@@ -202,65 +204,71 @@ class _InputTextState extends State<InputTextComponent> {
       onSaved: widget.controller.onSaved,
       onTap: widget.controller.onTap,
       onFieldSubmitted: widget.controller.onFieldSubmitted,
-      style: const TextStyle(
-        color: AppColors.black,
-      ),
-      inputFormatters: widget.controller.type == InputTextType.timeHour
-          ? [
-              FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(2),
-              FilteringTextInputFormatter.allow(RegExp(r'^(23|[0-1]?[0-9])?$')),
-              ...(widget.inputFormatters ?? []),
-            ]
-          : widget.controller.type == InputTextType.timeMinutes
+      style: const TextStyle(color: AppColors.black),
+      inputFormatters:
+          widget.controller.type == InputTextType.timeHour
               ? [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(2),
-                  FilteringTextInputFormatter.allow(
-                      RegExp(r'^(59|[0-5]?[0-9])?$')),
-                  ...(widget.inputFormatters ?? []),
-                ]
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(2),
+                FilteringTextInputFormatter.allow(
+                  RegExp(r'^(23|[0-1]?[0-9])?$'),
+                ),
+                ...(widget.inputFormatters ?? []),
+              ]
+              : widget.controller.type == InputTextType.timeMinutes
+              ? [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(2),
+                FilteringTextInputFormatter.allow(
+                  RegExp(r'^(59|[0-5]?[0-9])?$'),
+                ),
+                ...(widget.inputFormatters ?? []),
+              ]
               : widget.controller.type == InputTextType.number
-                  ? [
-                      FilteringTextInputFormatter.allow(
-                          RegExp(r'^(\d+)?\.?\d{0,10}')),
-                      ...(widget.inputFormatters ?? []),
-                    ]
-                  : widget.controller.type == InputTextType.money
-                      ? [
-                          CurrencyInputFormatter.allow,
-                          CurrencyInputFormatter(),
-                          ...(widget.inputFormatters ?? []),
-                        ]
-                      : widget.controller.type == InputTextType.text
-                          ? [
-                              FilteringTextInputFormatter.allow(
-                                  RegExp(r'[a-zA-Z0-9\-/@., ]+')),
-                              ...(widget.inputFormatters ?? []),
-                            ]
-                          : widget.controller.type == InputTextType.paragraf
-                              ? [
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp(r'[a-zA-Z0-9., ]+')),
-                                  ...(widget.inputFormatters ?? []),
-                                ]
-                              : widget.inputFormatters,
+              ? [
+                FilteringTextInputFormatter.allow(
+                  RegExp(r'^(\d+)?\.?\d{0,10}'),
+                ),
+                ...(widget.inputFormatters ?? []),
+              ]
+              : widget.controller.type == InputTextType.money
+              ? [
+                CurrencyInputFormatter.allow,
+                CurrencyInputFormatter(),
+                ...(widget.inputFormatters ?? []),
+              ]
+              : widget.controller.type == InputTextType.text
+              ? [
+                FilteringTextInputFormatter.allow(
+                  RegExp(r'[a-zA-Z0-9\-/@., ]+'),
+                ),
+                ...(widget.inputFormatters ?? []),
+              ]
+              : widget.controller.type == InputTextType.paragraf
+              ? [
+                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z0-9., ]+')),
+                ...(widget.inputFormatters ?? []),
+              ]
+              : widget.inputFormatters,
       controller: widget.controller._con,
-      validator: (v) =>
-          widget.controller._validator(v, otherValidator: widget.validator),
+      validator:
+          (v) =>
+              widget.controller._validator(v, otherValidator: widget.validator),
       autocorrect: false,
       enableSuggestions: false,
       readOnly: !widget.editable,
-      obscureText: widget.controller.type == InputTextType.password
-          ? !widget.controller._showPassword
-          : false,
+      obscureText:
+          widget.controller.type == InputTextType.password
+              ? !widget.controller._showPassword
+              : false,
       onEditingComplete: widget.controller.onEditingComplete,
-      keyboardType: (widget.controller.type == InputTextType.number ||
-              widget.controller.type == InputTextType.money ||
-              widget.controller.type == InputTextType.timeHour ||
-              widget.controller.type == InputTextType.timeMinutes)
-          ? TextInputType.number
-          : null,
+      keyboardType:
+          (widget.controller.type == InputTextType.number ||
+                  widget.controller.type == InputTextType.money ||
+                  widget.controller.type == InputTextType.timeHour ||
+                  widget.controller.type == InputTextType.timeMinutes)
+              ? TextInputType.number
+              : null,
       decoration: decoration,
     );
 
@@ -271,10 +279,7 @@ class _InputTextState extends State<InputTextComponent> {
         marginBottom: widget.marginBottom,
         childText: widget.controller._con.text,
         isRequired: widget.required,
-        children: Form(
-          key: widget.controller._key,
-          child: textFormField,
-        ),
+        children: Form(key: widget.controller._key, child: textFormField),
       ),
     );
   }

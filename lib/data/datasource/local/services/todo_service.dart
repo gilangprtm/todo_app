@@ -156,4 +156,64 @@ class TodoService extends BaseService {
       tag: 'TodoService',
     );
   }
+
+  // Create a new todo with subtasks and tags
+  Future<TodoModel> createTodo(TodoModel todo) async {
+    return await performanceAsync(
+      operationName: 'create_todo',
+      function: () async {
+        // Insert todo first
+        final todoMap = todo.toMap();
+        final todoId = await _repository.insertTodo(todoMap);
+
+        // Prepare todo with real ID
+        final newTodo = todo.copyWith(id: todoId);
+
+        // Add subtasks if any
+        if (todo.subtasks.isNotEmpty) {
+          for (var subtask in todo.subtasks) {
+            final subtaskMap = subtask.toMap();
+            subtaskMap['todo_id'] = todoId; // Set correct todo ID
+            await _repository.insertSubtask(subtaskMap);
+          }
+        }
+
+        // Add tag relationships if any
+        if (todo.tags.isNotEmpty) {
+          for (var tag in todo.tags) {
+            if (tag.id != null) {
+              await _repository.linkTodoWithTag(todoId, tag.id!);
+            }
+          }
+        }
+
+        // Get complete todo with relationships
+        final createdTodo = await _getTodoById(todoId);
+        return createdTodo;
+      },
+      tag: 'TodoService',
+    );
+  }
+
+  // Get a specific todo by ID with all relationships
+  Future<TodoModel> _getTodoById(int todoId) async {
+    final todoMaps = await _repository.fetchTodoById(todoId);
+    if (todoMaps.isEmpty) {
+      throw Exception("Todo with ID $todoId not found");
+    }
+
+    final todo = TodoModel.fromMap(todoMaps.first);
+
+    // Get subtasks
+    final subtaskMaps = await _repository.fetchSubtasksForTodo(todoId);
+    final subtasks =
+        subtaskMaps.map((map) => SubtaskModel.fromMap(map)).toList();
+
+    // Get tags
+    final tagMaps = await _repository.fetchTagsForTodo(todoId);
+    final tags = tagMaps.map((map) => TagModel.fromMap(map)).toList();
+
+    // Return complete todo
+    return todo.copyWith(subtasks: subtasks, tags: tags);
+  }
 }

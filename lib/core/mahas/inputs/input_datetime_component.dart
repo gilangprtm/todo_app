@@ -15,11 +15,7 @@ class InputDatetimeController {
   TimeOfDay? _time;
   String? _errorMessage;
 
-  InputDatetimeController({
-    this.onChanged,
-    this.onCheck,
-    this.onClear,
-  });
+  InputDatetimeController({this.onChanged, this.onCheck, this.onClear});
 
   Function()? onChanged;
   bool Function(DateTime? date)? onCheck;
@@ -95,6 +91,11 @@ class InputDatetimeController {
     }
   }
 
+  void clear() {
+    _date = null;
+    _time = null;
+  }
+
   void _init(
     Function(VoidCallback fn) setStateX,
     BuildContext contextX,
@@ -119,10 +120,7 @@ class InputDatetimeController {
   }
 }
 
-enum InputDatetimeType {
-  date,
-  time,
-}
+enum InputDatetimeType { date, time }
 
 class InputDatetimeComponent extends StatefulWidget {
   final String? label;
@@ -149,11 +147,16 @@ class InputDatetimeComponent extends StatefulWidget {
 class _InputDatetimeComponentState extends State<InputDatetimeComponent> {
   @override
   void initState() {
-    widget.controller._init((fn) {
-      if (mounted) {
-        setState(fn);
-      }
-    }, context, widget.required, widget.type);
+    widget.controller._init(
+      (fn) {
+        if (mounted) {
+          setState(fn);
+        }
+      },
+      context,
+      widget.required,
+      widget.type,
+    );
     super.initState();
   }
 
@@ -163,10 +166,12 @@ class _InputDatetimeComponentState extends State<InputDatetimeComponent> {
       label: widget.label,
       editable: widget.editable,
       isRequired: widget.required,
-      icon: widget.controller._type == InputDatetimeType.date
-          ? FontAwesomeIcons.calendar
-          : FontAwesomeIcons.clock,
-      alowClear: widget.editable &&
+      icon:
+          widget.controller._type == InputDatetimeType.date
+              ? FontAwesomeIcons.calendar
+              : FontAwesomeIcons.clock,
+      alowClear:
+          widget.editable &&
           ((widget.controller._type == InputDatetimeType.date &&
                   widget.controller._date != null) ||
               (widget.controller._type == InputDatetimeType.time &&
@@ -175,9 +180,10 @@ class _InputDatetimeComponentState extends State<InputDatetimeComponent> {
       clearOnTab: widget.controller._clearOnTab,
       marginBottom: widget.marginBottom,
       onTap: () => widget.controller._onTab(widget.editable),
-      childText: widget.controller._type == InputDatetimeType.date
-          ? MahasFormat.displayDate(widget.controller._date)
-          : widget.controller._time?.format(context) ?? '',
+      childText:
+          widget.controller._type == InputDatetimeType.date
+              ? MahasFormat.displayDate(widget.controller._date)
+              : widget.controller._time?.format(context) ?? '',
     );
   }
 }

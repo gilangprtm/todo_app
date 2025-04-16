@@ -220,4 +220,110 @@ class TodoRepository extends BaseRepository {
       rethrow;
     }
   }
+
+  // Fetch todo by ID
+  Future<List<Map<String, dynamic>>> fetchTodoById(int todoId) async {
+    try {
+      return await _db.queryWhere(DBLocal.tableTodo, 'id = ?', [todoId]);
+    } catch (e, stackTrace) {
+      logError(
+        'Error fetching todo by ID: $todoId',
+        error: e,
+        stackTrace: stackTrace,
+        tag: 'TodoRepository',
+      );
+      rethrow;
+    }
+  }
+
+  // Insert new todo
+  Future<int> insertTodo(Map<String, dynamic> todoMap) async {
+    try {
+      // Set created_at and updated_at if not provided
+      if (!todoMap.containsKey('created_at')) {
+        todoMap['created_at'] = DateTime.now().toIso8601String();
+      }
+      if (!todoMap.containsKey('updated_at')) {
+        todoMap['updated_at'] = DateTime.now().toIso8601String();
+      }
+
+      final id = await _db.insert(DBLocal.tableTodo, todoMap);
+      logInfo('Todo inserted successfully with ID: $id', tag: 'TodoRepository');
+      return id;
+    } catch (e, stackTrace) {
+      logError(
+        'Error inserting todo',
+        error: e,
+        stackTrace: stackTrace,
+        tag: 'TodoRepository',
+      );
+      rethrow;
+    }
+  }
+
+  // Insert new subtask
+  Future<int> insertSubtask(Map<String, dynamic> subtaskMap) async {
+    try {
+      // Set created_at and updated_at if not provided
+      if (!subtaskMap.containsKey('created_at')) {
+        subtaskMap['created_at'] = DateTime.now().toIso8601String();
+      }
+      if (!subtaskMap.containsKey('updated_at')) {
+        subtaskMap['updated_at'] = DateTime.now().toIso8601String();
+      }
+
+      final id = await _db.insert(DBLocal.tableSubtask, subtaskMap);
+      logInfo(
+        'Subtask inserted successfully with ID: $id',
+        tag: 'TodoRepository',
+      );
+      return id;
+    } catch (e, stackTrace) {
+      logError(
+        'Error inserting subtask',
+        error: e,
+        stackTrace: stackTrace,
+        tag: 'TodoRepository',
+      );
+      rethrow;
+    }
+  }
+
+  // Link todo with tag
+  Future<void> linkTodoWithTag(int todoId, int tagId) async {
+    try {
+      await _db.insert(DBLocal.tableTodoTag, {
+        'todo_id': todoId,
+        'tag_id': tagId,
+        'created_at': DateTime.now().toIso8601String(),
+      });
+      logInfo(
+        'Todo-Tag relationship created: Todo $todoId -> Tag $tagId',
+        tag: 'TodoRepository',
+      );
+    } catch (e, stackTrace) {
+      logError(
+        'Error linking todo with tag: Todo $todoId -> Tag $tagId',
+        error: e,
+        stackTrace: stackTrace,
+        tag: 'TodoRepository',
+      );
+      rethrow;
+    }
+  }
+
+  // Fetch all tags
+  Future<List<Map<String, dynamic>>> fetchAllTags() async {
+    try {
+      return await _db.queryAll(DBLocal.tableTag);
+    } catch (e, stackTrace) {
+      logError(
+        'Error fetching all tags',
+        error: e,
+        stackTrace: stackTrace,
+        tag: 'TodoRepository',
+      );
+      rethrow;
+    }
+  }
 }
