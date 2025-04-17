@@ -228,4 +228,20 @@ class TodoService extends BaseService {
       tag: 'TodoService',
     );
   }
+
+  // Create a new tag
+  Future<TagModel> createTag(TagModel tag) async {
+    return await performanceAsync(
+      operationName: 'create_tag',
+      function: () async {
+        // Insert tag first
+        final tagMap = tag.toMap();
+        final tagId = await _repository.insertTag(tagMap);
+
+        // Return updated tag with ID
+        return tag.copyWith(id: tagId);
+      },
+      tag: 'TodoService',
+    );
+  }
 }

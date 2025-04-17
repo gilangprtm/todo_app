@@ -195,4 +195,20 @@ class AddTaskNotifier extends BaseStateNotifier<AddTaskState> {
       clearError: true,
     );
   }
+
+  /// Create a new tag and add it to the database
+  Future<void> addNewTag(TagModel tag) async {
+    return await runAsync('addNewTag', () async {
+      try {
+        // Insert tag into database
+        await _todoService.createTag(tag);
+
+        // Reload tags to include the new one
+        await loadTags();
+      } catch (e, stackTrace) {
+        logger.e('Error adding new tag', error: e, stackTrace: stackTrace);
+        rethrow;
+      }
+    });
+  }
 }

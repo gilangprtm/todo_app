@@ -326,4 +326,26 @@ class TodoRepository extends BaseRepository {
       rethrow;
     }
   }
+
+  // Insert new tag
+  Future<int> insertTag(Map<String, dynamic> tagMap) async {
+    try {
+      // Set created_at if not provided
+      if (!tagMap.containsKey('created_at')) {
+        tagMap['created_at'] = DateTime.now().toIso8601String();
+      }
+
+      final id = await _db.insert(DBLocal.tableTag, tagMap);
+      logInfo('Tag inserted successfully with ID: $id', tag: 'TodoRepository');
+      return id;
+    } catch (e, stackTrace) {
+      logError(
+        'Error inserting tag',
+        error: e,
+        stackTrace: stackTrace,
+        tag: 'TodoRepository',
+      );
+      rethrow;
+    }
+  }
 }
