@@ -1,3 +1,4 @@
+import '../pages/add_task/add_task_page.dart';
 import '../pages/home/home_page.dart';
 
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class AppRoutesProvider {
       AppRoutes.home: (context) => const HomePage(),
       AppRoutes.onboarding: (context) => const OnboardingPage(),
       AppRoutes.calendar: (context) => const CalendarPage(),
+      AppRoutes.addTask: (context) => const AddTaskPage(),
 
       // The Pokemon detail page needs parameters, so it will be created using Navigator.push
       // directly from the home page. This route is just for reference or deep linking.

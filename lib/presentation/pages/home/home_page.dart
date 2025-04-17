@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/mahas/mahas_type.dart';
 import '../../../core/mahas/widget/mahas_menubar.dart';
-import '../../../core/mahas/widget/mahas_bottomsheet.dart';
 import '../../../core/theme/app_color.dart';
+import '../../../core/utils/mahas.dart';
 import '../../providers/home/home_provider.dart';
+import '../../routes/app_routes.dart';
 import '../task/task_page.dart';
 import '../calendar/calendar_page.dart';
 import '../stats/stats_page.dart';
 import '../settings/settings_page.dart';
-import '../add_task/add_task_page.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -67,12 +67,7 @@ class HomePage extends ConsumerWidget {
           icon: const Icon(Icons.add, size: 30),
           color: AppColors.getCardColor(context),
           onPressed: () {
-            MahasBottomSheet.show(
-              context: context,
-              title: 'Add New Task',
-              height: MediaQuery.of(context).size.height * 0.55,
-              child: const AddTaskPage(),
-            );
+            Mahas.routeTo(AppRoutes.addTask);
           },
         ),
       ),
