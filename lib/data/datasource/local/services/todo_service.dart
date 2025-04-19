@@ -166,14 +166,17 @@ class TodoService extends BaseService {
         final todoMap = todo.toMap();
         final todoId = await _repository.insertTodo(todoMap);
 
-        // Prepare todo with real ID
-        todo.copyWith(id: todoId);
-
-        // Add subtasks if any
+        // Insert subtasks with proper todo_id (but don't use negative IDs)
         if (todo.subtasks.isNotEmpty) {
           for (var subtask in todo.subtasks) {
-            final subtaskMap = subtask.toMap();
-            subtaskMap['todo_id'] = todoId; // Set correct todo ID
+            // Create a new map without the original ID (let SQLite generate it)
+            final subtaskMap = {
+              'todo_id': todoId,
+              'title': subtask.title,
+              'is_completed': subtask.isCompleted ? 1 : 0,
+              'created_at': subtask.createdAt.toIso8601String(),
+              'updated_at': subtask.updatedAt.toIso8601String(),
+            };
             await _repository.insertSubtask(subtaskMap);
           }
         }

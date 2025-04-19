@@ -52,7 +52,8 @@ class MahasButton extends StatelessWidget {
                   icon!,
                   if (text != null) const SizedBox(width: 8),
                 ],
-                if (text != null) Text(text!),
+                if (text != null)
+                  Text(text!, style: TextStyle(color: textColor)),
               ],
             );
 

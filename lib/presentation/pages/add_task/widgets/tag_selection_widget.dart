@@ -114,6 +114,7 @@ class TagSelectionWidget extends ConsumerWidget {
                 // Add tag button
                 MahasButton(
                   text: 'Add Tag',
+                  textColor: AppColors.getCardColor(context),
                   color: AppColors.getTextPrimaryColor(context),
                   isFullWidth: true,
                   onPressed: () {
@@ -282,7 +283,10 @@ class TagSelectionWidget extends ConsumerWidget {
         child: Text(
           tag.name,
           style: TextStyle(
-            color: isSelected ? Colors.white : Colors.black87,
+            color:
+                isSelected
+                    ? Colors.white
+                    : AppColors.getTextPrimaryColor(context),
             fontSize: 13,
           ),
         ),

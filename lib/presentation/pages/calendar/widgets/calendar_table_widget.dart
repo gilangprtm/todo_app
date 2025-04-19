@@ -54,6 +54,9 @@ class CalendarTableWidget extends ConsumerWidget {
               color: AppColors.getTextPrimaryColor(context),
               shape: BoxShape.circle,
             ),
+            selectedTextStyle: TextStyle(
+              color: AppColors.getCardColor(context),
+            ),
           ),
           headerStyle: const HeaderStyle(
             formatButtonVisible: true,

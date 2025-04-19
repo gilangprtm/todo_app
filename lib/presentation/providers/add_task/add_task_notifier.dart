@@ -95,6 +95,7 @@ class AddTaskNotifier extends BaseStateNotifier<AddTaskState> {
   /// Validasi form sebelum submit
   bool _validateForm() {
     if (!titleController.isValid) return false;
+    if (!dateController.isValid) return false;
 
     return true;
   }
@@ -107,19 +108,24 @@ class AddTaskNotifier extends BaseStateNotifier<AddTaskState> {
 
     await runAsync('submitTask', () async {
       try {
+        // Get date and time values directly from controllers
+        final date = dateController.value as DateTime?;
+        final time = timeController.value as TimeOfDay?;
+        final priority = priorityController.value as int? ?? state.priority;
+
         // Prepare combined date time if both are set
         DateTime? combinedDateTime;
-        if (state.dueDate != null) {
-          combinedDateTime = state.dueDate!;
+        if (date != null) {
+          combinedDateTime = date;
 
           // Add time if set
-          if (state.dueTime != null) {
+          if (time != null) {
             combinedDateTime = DateTime(
-              state.dueDate!.year,
-              state.dueDate!.month,
-              state.dueDate!.day,
-              state.dueTime!.hour,
-              state.dueTime!.minute,
+              date.year,
+              date.month,
+              date.day,
+              time.hour,
+              time.minute,
             );
           }
         }
@@ -129,7 +135,7 @@ class AddTaskNotifier extends BaseStateNotifier<AddTaskState> {
           title: titleController.value.trim(),
           description: descriptionController.value.trim(),
           dueDate: combinedDateTime,
-          priority: state.priority,
+          priority: priority,
           status: 0, // Pending by default
           subtasks: state.subtasks,
           tags: state.selectedTags,

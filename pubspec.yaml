@@ -32,7 +32,7 @@ dependencies:
     sdk: flutter
 
   # State management
-  flutter_riverpod: ^2.5.0
+  flutter_riverpod: ^2.3.6
   riverpod_annotation: ^2.5.0
 
   # Networking & API
@@ -44,8 +44,8 @@ dependencies:
   cached_network_image: ^3.3.0
   flutter_cache_manager: ^3.3.1
   shared_preferences: ^2.2.1
-  sqflite: ^2.3.0
-  path_provider: ^2.1.1
+  sqflite: ^2.2.8+4
+  path_provider: ^2.0.15
   path: ^1.8.3
 
   # UI Components & Styling
@@ -65,9 +65,10 @@ dependencies:
   image_picker: ^1.1.2
 
   # Utilities
-  intl: ^0.20.2
+  intl: ^0.18.1
   package_info_plus: ^8.3.0
   uuid: ^4.5.1
+  permission_handler: ^12.0.0+1
 
 dev_dependencies:
   flutter_test:

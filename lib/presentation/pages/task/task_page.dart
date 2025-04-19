@@ -72,7 +72,7 @@ class TaskPage extends StatelessWidget {
                   ],
                   activeColor: AppColors.getTextPrimaryColor(context),
                   backgroundColor: Colors.grey[200]!,
-                  activeTextColor: Colors.white,
+                  activeTextColor: AppColors.getCardColor(context),
                   inactiveTextColor: AppColors.getTextSecondaryColor(context),
                   height: 45,
                   borderRadius: 15,

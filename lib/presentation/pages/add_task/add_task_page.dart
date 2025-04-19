@@ -94,6 +94,7 @@ class AddTaskPage extends ConsumerWidget {
                         controller: notifier.dateController,
                         label: 'Tanggal & Waktu',
                         type: InputDatetimeType.date,
+                        required: true,
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -130,6 +131,7 @@ class AddTaskPage extends ConsumerWidget {
 
                 MahasButton(
                   text: 'Create Task',
+                  textColor: AppColors.getCardColor(context),
                   color: AppColors.getTextPrimaryColor(context),
                   isFullWidth: true,
                   isLoading: state.isSubmitting,

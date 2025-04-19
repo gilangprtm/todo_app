@@ -10,24 +10,8 @@ import 'calendar_state.dart';
 class CalendarNotifier extends BaseStateNotifier<CalendarState> {
   final TodoService _todoService;
   final ScrollController scrollController = ScrollController();
-  bool _isScrollDetected = false;
 
-  CalendarNotifier(super.initialState, super.ref, this._todoService) {
-    // Inisialisasi scroll controller
-    scrollController.addListener(_onScroll);
-  }
-
-  void _onScroll() {
-    if (scrollController.offset > 20 && !_isScrollDetected) {
-      _isScrollDetected = true;
-      // Ubah format calendar ke tampilan minggu ketika user scroll ke bawah
-      setCalendarFormat(CalendarFormat.week);
-    } else if (scrollController.offset <= 20 && _isScrollDetected) {
-      _isScrollDetected = false;
-      // Ubah format calendar kembali ke tampilan bulan ketika user scroll ke atas
-      setCalendarFormat(CalendarFormat.month);
-    }
-  }
+  CalendarNotifier(super.initialState, super.ref, this._todoService);
 
   @override
   Future<void> onInit() async {
@@ -47,7 +31,6 @@ class CalendarNotifier extends BaseStateNotifier<CalendarState> {
 
   @override
   void onClose() {
-    scrollController.removeListener(_onScroll);
     scrollController.dispose();
     super.onClose();
   }
@@ -203,6 +186,7 @@ class CalendarNotifier extends BaseStateNotifier<CalendarState> {
 
   // Handle page change dari calendar
   void handleCalendarPageChanged(DateTime page) {
+    logger.d("$page");
     // Extract the year and month from the page
     final int year = page.year;
     final int month = page.month;
