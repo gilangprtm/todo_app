@@ -4,9 +4,13 @@ import 'core/mahas/mahas_service.dart';
 import 'core/theme/app_theme.dart';
 import 'core/utils/mahas.dart';
 import 'presentation/routes/app_routes_provider.dart';
+import 'presentation/providers/settings/theme/theme_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Buat container yang akan digunakan bersama
+  final container = ProviderContainer();
 
   // Inisialisasi semua service melalui MahasService
   await MahasService.init();
@@ -14,16 +18,27 @@ void main() async {
   // Periksa apakah data sudah ada
   final String initialRoute = await MahasService.determineInitialRoute();
 
-  runApp(ProviderScope(child: MyApp(initialRoute: initialRoute)));
+  // Inisialisasi theme melalui MahasService
+  await MahasService.initThemeWithContainer(container);
+
+  runApp(
+    UncontrolledProviderScope(
+      container: container,
+      child: MyApp(initialRoute: initialRoute),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   final String initialRoute;
 
   const MyApp({super.key, required this.initialRoute});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Pantau theme state untuk update ketika berubah
+    final themeState = ref.watch(themeProvider);
+
     return MaterialApp(
       title: 'Todo App',
       debugShowCheckedModeBanner: false,
@@ -32,7 +47,7 @@ class MyApp extends StatelessWidget {
       navigatorKey: Mahas.navigatorKey,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.light,
+      themeMode: themeState.themeMode,
     );
   }
 }

@@ -1,6 +1,9 @@
 import 'dart:async';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../presentation/providers/settings/theme/theme_provider.dart';
 import '../../presentation/routes/app_routes.dart';
+import '../di/service_providers.dart';
 import '../services/logger_service.dart';
 import '../services/error_handler_service.dart';
 import '../services/firebase_service.dart';
@@ -76,6 +79,32 @@ class MahasService {
       );
       // Return onboarding as fallback to ensure proper initialization
       return AppRoutes.onboarding;
+    }
+  }
+
+  /// Inisialisasi theme menggunakan container yang diberikan dari main
+  /// untuk memastikan theme diinisialisasi dengan benar sebelum aplikasi dimulai
+  static Future<void> initThemeWithContainer(
+    ProviderContainer container,
+  ) async {
+    try {
+      // Gunakan container yang sama yang akan digunakan oleh app
+      final themeService = container.read(themeServiceProvider);
+      final themeNotifier = container.read(themeProvider.notifier);
+
+      // Ambil tema dari database
+      final currentTheme = await themeService.getCurrentThemeMode();
+
+      // Set ke theme notifier
+      await themeNotifier.setTheme(currentTheme);
+    } catch (e, stackTrace) {
+      LoggerService.instance.e(
+        '❌ Error initializing theme',
+        error: e,
+        stackTrace: stackTrace,
+        tag: 'MAHAS',
+      );
+      // Tidak throw exception agar aplikasi tetap bisa berjalan dengan tema default
     }
   }
 

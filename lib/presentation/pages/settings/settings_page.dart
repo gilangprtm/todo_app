@@ -7,6 +7,7 @@ import 'package:path/path.dart' as path;
 import '../../../core/theme/app_color.dart';
 import '../../../core/mahas/widget/mahas_button.dart';
 import '../../../core/di/service_providers.dart';
+import '../../providers/settings/theme/theme_provider.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
@@ -172,6 +173,11 @@ class SettingsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Get current theme mode
+    final themeState = ref.watch(themeProvider);
+    final themeNotifier = ref.read(themeProvider.notifier);
+    final isDarkMode = themeState.themeMode == ThemeMode.dark;
+
     return Scaffold(
       appBar: AppBar(title: const Text('Settings'), elevation: 0),
       body: SafeArea(
@@ -180,6 +186,44 @@ class SettingsPage extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Theme toggle section
+              const Text(
+                'Appearance',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 2,
+                      offset: const Offset(0, 1),
+                    ),
+                  ],
+                ),
+                child: ListTile(
+                  title: const Text('Dark Mode'),
+                  subtitle: Text(isDarkMode ? 'On' : 'Off'),
+                  leading: Icon(
+                    isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                    color: isDarkMode ? Colors.amber : AppColors.primaryColor,
+                  ),
+                  trailing: Switch(
+                    value: isDarkMode,
+                    activeColor: AppColors.primaryColor,
+                    onChanged: (value) {
+                      themeNotifier.toggleTheme();
+                    },
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 32),
+
+              // Database Tools section
               const Text(
                 'Database Tools',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
