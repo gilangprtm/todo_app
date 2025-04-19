@@ -58,9 +58,4 @@ class HomeNotifier extends BaseStateNotifier<HomeState> {
   void refreshCurrentTab() {
     _silentRefreshTab(state.selectedMenuIndex);
   }
-
-  @override
-  Future<void> onInit() async {
-    logger.d('HomeNotifier initialized', tag: 'HomeNotifier');
-  }
 }

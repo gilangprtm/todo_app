@@ -114,6 +114,54 @@ class CalendarNotifier extends BaseStateNotifier<CalendarState> {
     });
   }
 
+  // Load tasks untuk rentang tanggal tertentu
+  Future<void> loadTasksForDateRange(DateTime start, DateTime end) async {
+    await runAsync('loadTasksForDateRange', () async {
+      try {
+        state = state.copyWith(isLoadingTasks: true);
+
+        final dateRangeTasks = await _todoService.getTasksForDateRange(
+          start,
+          end,
+        );
+
+        // Buat map untuk event markers
+        final eventMarkers = <DateTime, List<TodoModel>>{};
+        for (final task in dateRangeTasks) {
+          if (task.dueDate != null) {
+            final dateOnly = DateTime(
+              task.dueDate!.year,
+              task.dueDate!.month,
+              task.dueDate!.day,
+            );
+
+            if (eventMarkers[dateOnly] == null) {
+              eventMarkers[dateOnly] = [task];
+            } else {
+              eventMarkers[dateOnly]!.add(task);
+            }
+          }
+        }
+
+        // Update state dengan data tasks baru
+        state = state.copyWith(
+          calendarTasks: dateRangeTasks,
+          eventMarkers: eventMarkers,
+          isLoadingTasks: false,
+          isLoading: false,
+          clearError: true,
+        );
+      } catch (e, stackTrace) {
+        state = state.copyWith(
+          error: e,
+          stackTrace: stackTrace,
+          isLoading: false,
+          isLoadingTasks: false,
+        );
+      }
+    });
+  }
+
   // Load tasks untuk bulan tertentu - HANYA mengurus pengambilan data task
   Future<void> loadTasksForMonth(int year, int month) async {
     await runAsync('loadTasksForMonth', () async {
@@ -182,34 +230,54 @@ class CalendarNotifier extends BaseStateNotifier<CalendarState> {
   // Set calendar format - untuk mengubah tampilan kalender antara bulan/minggu
   void setCalendarFormat(CalendarFormat format) {
     state = state.copyWith(calendarFormat: format);
+
+    // When format changes, load tasks for the current visible range
+    _loadTasksForCurrentFormat(state.focusedDay, format);
   }
 
   // Handle page change dari calendar
   void handleCalendarPageChanged(DateTime page) {
-    logger.d("$page");
-    // Extract the year and month from the page
-    final int year = page.year;
-    final int month = page.month;
-
-    // Create a new focusedDay that maintains the same day as the selectedDay if possible,
-    // or uses the day from the page parameter if no selectedDay exists
-    final int day = state.selectedDay?.day ?? page.day;
-
-    // Make sure we don't create an invalid date (e.g., February 30)
-    final int lastDayOfMonth = DateTime(year, month + 1, 0).day;
-    final int actualDay = day > lastDayOfMonth ? lastDayOfMonth : day;
-    final DateTime newFocusedDay = DateTime(year, month, actualDay);
-
-    // Update the state with the new focusedDay and currentMonth
-    state = state.copyWith(
-      focusedDay: newFocusedDay,
-      currentMonth: '$year-$month',
+    logger.d(
+      "Calendar page changed to: $page, format: ${state.calendarFormat}",
     );
 
-    // Tunggu animasi selesai, baru muat data - delay 700ms
-    Timer(const Duration(milliseconds: 700), () {
+    // Update the focused day based on the new page
+    state = state.copyWith(focusedDay: page);
+
+    // Load tasks based on the current calendar format
+    _loadTasksForCurrentFormat(page, state.calendarFormat);
+  }
+
+  // Helper method to load tasks based on calendar format
+  void _loadTasksForCurrentFormat(DateTime focusedDay, CalendarFormat format) {
+    // Tunggu animasi selesai, baru muat data - delay 500ms
+    Timer(const Duration(milliseconds: 500), () {
       if (!mounted) return;
-      loadTasksForMonth(year, month);
+
+      switch (format) {
+        case CalendarFormat.month:
+          // For month view, load the whole month
+          loadTasksForMonth(focusedDay.year, focusedDay.month);
+          break;
+
+        case CalendarFormat.week:
+          // For week view, load +/- 3 days from focused day (7 days total)
+          final startOfWeek = focusedDay.subtract(
+            Duration(days: focusedDay.weekday - 1),
+          );
+          final endOfWeek = startOfWeek.add(const Duration(days: 6));
+          loadTasksForDateRange(startOfWeek, endOfWeek);
+          break;
+
+        case CalendarFormat.twoWeeks:
+          // For two weeks view, load +/- 7 days from focused day (14 days total)
+          final startDate = focusedDay.subtract(
+            Duration(days: focusedDay.weekday - 1),
+          );
+          final endDate = startDate.add(const Duration(days: 13));
+          loadTasksForDateRange(startDate, endDate);
+          break;
+      }
     });
   }
 
@@ -249,22 +317,23 @@ class CalendarNotifier extends BaseStateNotifier<CalendarState> {
 
           if (updatedMarkers[dateOnly] != null) {
             updatedMarkers[dateOnly] =
-                updatedMarkers[dateOnly]!.map((task) {
-                  if (task.id == todo.id) {
-                    return updatedTodo;
-                  }
-                  return task;
-                }).toList();
+                updatedMarkers[dateOnly]!
+                    .map((t) => t.id == todo.id ? updatedTodo : t)
+                    .toList();
           }
         }
 
-        // Update state dengan task yang diperbarui
+        // Update state
         state = state.copyWith(
           calendarTasks: updatedTasks,
           eventMarkers: updatedMarkers,
         );
       } catch (e, stackTrace) {
-        state = state.copyWith(error: e, stackTrace: stackTrace);
+        logger.e(
+          'Error toggling todo status',
+          error: e,
+          stackTrace: stackTrace,
+        );
       }
     });
   }
