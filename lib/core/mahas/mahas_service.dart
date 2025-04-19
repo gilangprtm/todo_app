@@ -21,13 +21,16 @@ class MahasService {
   MahasService._internal();
 
   /// Inisialisasi seluruh layanan yang dibutuhkan sebelum aplikasi dijalankan
-  static Future<void> init() async {
+  static Future<void> init({required ProviderContainer container}) async {
     try {
       // Inisialisasi Logger terlebih dahulu untuk bisa mencatat progress inisialisasi lainnya
       final logger = LoggerService.instance;
 
       // Inisialisasi error handler
       await initErrorHandler();
+
+      // Inisialisasi theme
+      await initThemeWithContainer(container);
 
       // Inisialisasi Cache Service
       //await initCache();

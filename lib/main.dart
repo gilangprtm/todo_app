@@ -13,13 +13,10 @@ void main() async {
   final container = ProviderContainer();
 
   // Inisialisasi semua service melalui MahasService
-  await MahasService.init();
+  await MahasService.init(container: container);
 
   // Periksa apakah data sudah ada
   final String initialRoute = await MahasService.determineInitialRoute();
-
-  // Inisialisasi theme melalui MahasService
-  await MahasService.initThemeWithContainer(container);
 
   runApp(
     UncontrolledProviderScope(
