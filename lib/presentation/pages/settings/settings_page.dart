@@ -209,11 +209,14 @@ class SettingsPage extends ConsumerWidget {
                   subtitle: Text(isDarkMode ? 'On' : 'Off'),
                   leading: Icon(
                     isDarkMode ? Icons.dark_mode : Icons.light_mode,
-                    color: isDarkMode ? Colors.amber : AppColors.primaryColor,
+                    color:
+                        isDarkMode
+                            ? AppColors.cardColor
+                            : AppColors.darkSurfaceColor,
                   ),
                   trailing: Switch(
                     value: isDarkMode,
-                    activeColor: AppColors.primaryColor,
+                    activeColor: AppColors.getTextPrimaryColor(context),
                     onChanged: (value) {
                       themeNotifier.toggleTheme();
                     },
@@ -230,8 +233,9 @@ class SettingsPage extends ConsumerWidget {
               ),
               const SizedBox(height: 16),
               MahasButton(
+                textColor: AppColors.getCardColor(context),
                 text: 'Export Database',
-                color: AppColors.primaryColor,
+                color: AppColors.getTextPrimaryColor(context),
                 isFullWidth: true,
                 onPressed: () => _exportDatabase(context, ref),
               ),
