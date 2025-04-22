@@ -4,7 +4,6 @@ import '../../../data/datasource/local/services/todo_service.dart';
 import '../../../data/models/tag_model.dart';
 import '../../../data/models/todo_model.dart';
 import 'stats_state.dart';
-import '../stats/stats_state.dart';
 
 /// Notifier untuk mengelola state halaman Statistics
 class StatsNotifier extends BaseStateNotifier<StatsState> {

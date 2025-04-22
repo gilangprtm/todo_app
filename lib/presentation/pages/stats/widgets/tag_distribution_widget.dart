@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '../../../../core/theme/app_color.dart';
 import '../../../../data/models/tag_model.dart';
 import '../../../providers/stats/stats_provider.dart';
 
@@ -204,7 +203,7 @@ class _Badge extends StatelessWidget {
         border: Border.all(color: Colors.white, width: 2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             offset: const Offset(0, 1),
             blurRadius: 3,
           ),

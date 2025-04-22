@@ -9,7 +9,6 @@ import 'widgets/tag_distribution_widget.dart';
 import 'widgets/priority_completion_widget.dart';
 import 'widgets/productivity_trends_widget.dart';
 import 'widgets/achievements_widget.dart';
-import 'widgets/date_range_selector_widget.dart';
 
 class StatsPage extends StatelessWidget {
   const StatsPage({super.key});

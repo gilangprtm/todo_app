@@ -109,20 +109,6 @@ class _ActivityHeatmapWidgetState extends ConsumerState<ActivityHeatmapWidget> {
     }
   }
 
-  Color _getHeatmapColorByIntensity(double intensity) {
-    if (intensity <= 0) {
-      return Colors.grey.shade200;
-    } else if (intensity < 0.25) {
-      return Colors.green.shade100;
-    } else if (intensity < 0.5) {
-      return Colors.green.shade300;
-    } else if (intensity < 0.75) {
-      return Colors.green.shade500;
-    } else {
-      return Colors.green.shade700;
-    }
-  }
-
   Color _getColorForCount(double normalizedCount) {
     if (normalizedCount <= 0) {
       return Colors.grey.shade200;
@@ -227,10 +213,9 @@ class MonthCalendarHeatmap extends StatelessWidget {
     final totalDaysWithOffset = daysInMonth + dayOffset;
 
     // Calculate how many rows needed (7 days per row)
-    final int rowsNeeded = (totalDaysWithOffset / 7).ceil();
+    (totalDaysWithOffset / 7).ceil();
 
     // Calculate total cells (rows × 7)
-    final int totalCells = rowsNeeded * 7;
 
     // Adjust for special cases
     int itemCount = 35; // Default is 5 rows (35 cells)

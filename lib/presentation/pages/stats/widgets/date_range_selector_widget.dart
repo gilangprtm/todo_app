@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/theme/app_color.dart';
 import '../../../../core/mahas/inputs/input_dropdown_component.dart';
 import '../../../providers/stats/stats_provider.dart';
 import '../../../providers/stats/stats_state.dart';
