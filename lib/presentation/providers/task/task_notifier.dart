@@ -285,4 +285,37 @@ class TaskNotifier extends BaseStateNotifier<TaskState> {
       }
     });
   }
+
+  // Delete a todo
+  Future<void> deleteTodo(TodoModel todo) async {
+    await runAsync('deleteTodo', () async {
+      try {
+        // Delete the todo via service
+        await _todoService.deleteTodo(todo);
+
+        // Update state by removing the todo
+        List<TodoModel> updatedTodos = List.from(state.todos);
+        List<TodoModel> updatedPreviousTodos = List.from(state.previousTodos);
+
+        // Remove from today's todos if present
+        updatedTodos.removeWhere((t) => t.id == todo.id);
+
+        // Remove from previous todos if present
+        updatedPreviousTodos.removeWhere((t) => t.id == todo.id);
+
+        // Calculate the new completed count
+        final completedCount =
+            updatedTodos.where((todo) => todo.status == 2).length;
+
+        state = state.copyWith(
+          todos: updatedTodos,
+          previousTodos: updatedPreviousTodos,
+          completedCount: completedCount,
+          clearError: true,
+        );
+      } catch (e, stackTrace) {
+        state = state.copyWith(error: e, stackTrace: stackTrace);
+      }
+    });
+  }
 }

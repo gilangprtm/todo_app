@@ -400,4 +400,41 @@ class CalendarNotifier extends BaseStateNotifier<CalendarState> {
       }
     });
   }
+
+  // Delete a todo
+  Future<void> deleteTodo(TodoModel todo) async {
+    await runAsync('deleteTodo', () async {
+      try {
+        // Delete the todo via service
+        await _todoService.deleteTodo(todo);
+
+        // Update state by removing the todo from event markers
+        final Map<DateTime, List<TodoModel>> updatedEventMarkers = Map.from(
+          state.eventMarkers,
+        );
+
+        // Remove the todo from all dates in the event markers
+        for (final date in updatedEventMarkers.keys) {
+          updatedEventMarkers[date] =
+              updatedEventMarkers[date]!.where((t) => t.id != todo.id).toList();
+        }
+
+        // Remove the todo from current calendar tasks
+        final List<TodoModel> updatedCalendarTasks =
+            state.calendarTasks.where((t) => t.id != todo.id).toList();
+
+        // Update the state
+        state = state.copyWith(
+          eventMarkers: updatedEventMarkers,
+          calendarTasks: updatedCalendarTasks,
+          clearError: true,
+        );
+
+        // If this was for the current month/view, refresh the current format
+        _loadTasksForCurrentFormat(state.focusedDay, state.calendarFormat);
+      } catch (e, stackTrace) {
+        state = state.copyWith(error: e, stackTrace: stackTrace);
+      }
+    });
+  }
 }

@@ -247,4 +247,20 @@ class TodoService extends BaseService {
       tag: 'TodoService',
     );
   }
+
+  // Delete a todo and its relationships
+  Future<void> deleteTodo(TodoModel todo) async {
+    return await performanceAsync(
+      operationName: 'delete_todo',
+      function: () async {
+        if (todo.id == null) {
+          throw Exception("Cannot delete todo without ID");
+        }
+
+        // Delete the todo (subtasks and todo_tag relationships will be deleted via cascade)
+        await _repository.deleteTodo(todo.id!);
+      },
+      tag: 'TodoService',
+    );
+  }
 }

@@ -348,4 +348,20 @@ class TodoRepository extends BaseRepository {
       rethrow;
     }
   }
+
+  // Delete a todo by ID (cascade will delete subtasks and todo-tag relationships)
+  Future<void> deleteTodo(int todoId) async {
+    try {
+      await _db.delete(DBLocal.tableTodo, 'id = ?', [todoId]);
+      logInfo('Todo deleted successfully: $todoId', tag: 'TodoRepository');
+    } catch (e, stackTrace) {
+      logError(
+        'Error deleting todo with ID: $todoId',
+        error: e,
+        stackTrace: stackTrace,
+        tag: 'TodoRepository',
+      );
+      rethrow;
+    }
+  }
 }

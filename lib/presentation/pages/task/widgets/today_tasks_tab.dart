@@ -70,6 +70,9 @@ class TodayTasksTab extends ConsumerWidget {
                                   .read(taskProvider.notifier)
                                   .toggleSubtaskStatus(subtask);
                             },
+                            onDelete: () {
+                              ref.read(taskProvider.notifier).deleteTodo(todo);
+                            },
                             showSubtasks: true,
                             simplifiedView: false,
                           );
@@ -136,6 +139,9 @@ class TodayTasksTab extends ConsumerWidget {
                               ref
                                   .read(taskProvider.notifier)
                                   .toggleSubtaskStatus(subtask);
+                            },
+                            onDelete: () {
+                              ref.read(taskProvider.notifier).deleteTodo(todo);
                             },
                             showSubtasks: true,
                             simplifiedView: false,

@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import '../../core/theme/app_color.dart';
 import '../../core/theme/app_typografi.dart';
 import '../../core/mahas/widget/mahas_card.dart';
+import '../../core/mahas/widget/mahas_alert.dart';
+import '../../core/mahas/mahas_type.dart';
 import '../../data/models/todo_model.dart';
 import '../../data/models/subtask_model.dart';
 
@@ -10,6 +12,7 @@ class TaskItemWidget extends StatelessWidget {
   final TodoModel todo;
   final VoidCallback onToggleStatus;
   final Function(SubtaskModel)? onToggleSubtask;
+  final VoidCallback? onDelete;
   final bool showSubtasks;
   final bool simplifiedView;
 
@@ -18,6 +21,7 @@ class TaskItemWidget extends StatelessWidget {
     required this.todo,
     required this.onToggleStatus,
     this.onToggleSubtask,
+    this.onDelete,
     this.showSubtasks = true,
     this.simplifiedView = false,
   });
@@ -122,6 +126,22 @@ class TaskItemWidget extends StatelessWidget {
                   Icons.priority_high,
                   size: 18,
                   color: isDark ? Colors.red[300] : Colors.red,
+                ),
+              ],
+              // Add delete button
+              if (onDelete != null) ...[
+                const SizedBox(width: 8),
+                IconButton(
+                  icon: Icon(
+                    Icons.delete_outline,
+                    size: 20,
+                    color: isDark ? Colors.red[300] : Colors.red,
+                  ),
+                  onPressed: () => _showDeleteConfirmation(context),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  splashRadius: 20,
+                  tooltip: 'Delete task',
                 ),
               ],
             ],
@@ -251,6 +271,48 @@ class TaskItemWidget extends StatelessWidget {
           ],
         ],
       ),
+    );
+  }
+
+  // Show a confirmation dialog before deleting
+  void _showDeleteConfirmation(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext dialogContext) {
+        return MahasAlertDialog(
+          alertType: AlertType.confirmation,
+          content: Text('Are you sure you want to delete "${todo.title}"?'),
+          positiveButtonText: 'Delete',
+          negativeButtonText: 'Cancel',
+          // Don't navigate in callbacks, the MahasAlertDialog does that automatically
+          onPositivePressed: () {
+            if (onDelete != null) {
+              onDelete!();
+              // Show success dialog after deletion
+              _showDeleteSuccessDialog(context);
+            }
+          },
+          // We don't need to do anything on cancel
+          onNegativePressed: null,
+        );
+      },
+    );
+  }
+
+  // Show success dialog after task deletion
+  void _showDeleteSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return MahasAlertDialog(
+          alertType: AlertType.succes,
+          title: 'Task Deleted!',
+          content: Text('The task "${todo.title}" was successfully deleted.'),
+          showNegativeButton: false,
+          showPositiveButton: false,
+        );
+      },
     );
   }
 }

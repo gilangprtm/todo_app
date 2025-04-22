@@ -48,6 +48,9 @@ class TasksListWidget extends ConsumerWidget {
                     .read(calendarProvider.notifier)
                     .toggleSubtaskStatus(subtask);
               },
+              onDelete: () {
+                ref.read(calendarProvider.notifier).deleteTodo(task);
+              },
               showSubtasks: true,
               simplifiedView: false,
             );

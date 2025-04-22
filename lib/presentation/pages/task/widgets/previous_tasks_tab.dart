@@ -92,6 +92,9 @@ class PreviousTasksTab extends ConsumerWidget {
                             .read(taskProvider.notifier)
                             .toggleSubtaskStatus(subtask);
                       },
+                      onDelete: () {
+                        ref.read(taskProvider.notifier).deleteTodo(todo);
+                      },
                       showSubtasks: true,
                       simplifiedView: false,
                     );

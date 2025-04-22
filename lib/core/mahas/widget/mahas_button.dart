@@ -119,6 +119,7 @@ class MahasButton extends StatelessWidget {
       width: isFullWidth ? double.infinity : null,
       child: TextButton(
         style: TextButton.styleFrom(
+          backgroundColor: buttonColor,
           foregroundColor: effectiveTextColor,
           textStyle: AppTypography.button.copyWith(color: effectiveTextColor),
         ),
